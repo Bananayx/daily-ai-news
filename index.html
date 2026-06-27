@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Daily | 每日AI新闻追踪</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0a0a23 0%, #1a1a3e 50%, #0d0d26 100%);
+            color: #e0e0ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 星空背景效果 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* 头部导航 */
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 20px 0;
+            background: rgba(10, 10, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 200, 255, 0.2);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #00d4ff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        
+        .logo span {
+            color: #ff6b9d;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: #b0b0ff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .nav-link:hover {
+            color: #00d4ff;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00d4ff;
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 今日热点区域 */
+        .today-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: #00d4ff;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #00d4ff 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+        
+        .hot-news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .news-card {
+            background: rgba(20, 20, 50, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .news-card:hover::before {
+            left: 100%;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+        
+        .news-card.important {
+            border-color: #ff6b9d;
+            background: rgba(30, 20, 50, 0.7);
+        }
+        
+        .news-card.important:hover {
+            border-color: #ff6b9d;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+        }
+        
+        .news-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+        
+        .news-tag.important {
+            background: rgba(255, 107, 157, 0.2);
+            color: #ff6b9d;
+        }
+        
+        .news-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .news-summary {
+            font-size: 14px;
+            color: #b0b0ff;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .news-source {
+            font-size: 12px;
+            color: #6b6b9d;
+        }
+        
+        .news-source a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        
+        /* 历史新闻时间线 */
+        .history-section {
+            margin-top: 80px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #00d4ff, #ff6b9d, #00d4ff);
+            animation: timelineFlow 3s infinite linear;
+        }
+        
+        @keyframes timelineFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(20, 20, 50, 0.5);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 25px;
+            width: 15px;
+            height: 15px;
+            background: #00d4ff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        
+        .timeline-item:hover {
+            background: rgba(30, 30, 60, 0.7);
+            transform: translateX(10px);
+        }
+        
+        .timeline-date {
+            font-size: 14px;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-link {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .timeline-link:hover {
+            background: #00d4ff;
+            color: #0a0a23;
+        }
+        
+        /* 趋势点评区 */
+        .trend-section {
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(30, 20, 50, 0.6);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 15px;
+        }
+        
+        .trend-title {
+            font-size: 20px;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+        }
+        
+        .trend-content {
+            font-size: 15px;
+            color: #e0e0ff;
+            line-height: 1.8;
+        }
+        
+        /* 页脚 */
+        .footer {
+            position: relative;
+            z-index: 10;
+            padding: 40px 0 20px;
+            background: rgba(10, 10, 35, 0.8);
+            border-top: 1px solid rgba(100, 200, 255, 0.2);
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .footer-text {
+            color: #6b6b9d;
+            font-size: 14px;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav {
+                gap: 15px;
+            }
+            
+            .hot-news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline {
+                padding-left: 30px;
+            }
+            
+            .timeline-item::before {
+                left: -30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars">
+        <script>
+            // 生成100个星星
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                document.querySelector('.stars').appendChild(star);
+            }
+        </script>
+    </div>
+    
+    <!-- 头部 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">AI <span>Daily</span></div>
+            <nav class="nav">
+                <a href="#today" class="nav-link">今日热点</a>
+                <a href="#history" class="nav-link">历史新闻</a>
+                <a href="#trend" class="nav-link">趋势点评</a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- 主内容 -->
+    <main class="main-content">
+        <!-- 今日热点 -->
+        <section class="today-section" id="today">
+            <h2 class="section-title">2026年6月27日 · 今日热点</h2>
+            <div class="hot-news-grid">
+                <!-- 重要新闻 -->
+                <div class="news-card important">
+                    <span class="news-tag important">重磅发布</span>
+                    <h3 class="news-title">OpenAI发布GPT-5.6系列三款模型</h3>
+                    <p class="news-summary">OpenAI正式推出GPT-5.6系列，首次采用天体命名体系：Sol（太阳）、Terra（大地）、Luna（月亮），旗舰版Sol在编程、生物学、网络安全等领域实现显著突破，仅限可信合作伙伴预览。</p>
+                    <div class="news-source">来源：<a href="#">新智元 / TechCrunch</a></div>
+                </div>
+                
+                <div class="news-card important">
+                    <span class="news-tag important">监管松绑</span>
+                    <h3 class="news-title">美国政府放宽Anthropic Mythos 5限制</h3>
+                    <p class="news-summary">美国商务部致函Anthropic，允许其向100多家"可信合作伙伴"重新部署Mythos 5模型，Fable 5全面开放进程同步推进，标志着AI监管从完全封禁转向分级管控。</p>
+                    <div class="news-source">来源：<a href="#">中国基金报 / 纽约时报</a></div>
+                </div>
+                
+                <div class="news-card">
+                    <span class="news-tag">融资动态</span>
+                    <h3 class="news-title">OpenAI考虑推迟IPO至2027年</h3>
+                    <p class="news-summary">受SpaceX上市后股价持续下跌影响，OpenAI正考虑将IPO从今年下半年推迟到明年，力争维持1万亿美元估值目标，首席财务官透露已计划在2027年上市。</p>
+                    <div class="news-source">来源：<a href="#">财联社</a></div>
+                </div>
+                
+                <div class="news-card">
+                    <span class="news-tag">市场格局</span>
+                    <h3 class="news-title">Anthropic年收入470亿美元，B端反超OpenAI</h3>
+                    <p class="news-summary">Anthropic年化收入飙升至470亿美元，85%来自企业客户和API调用，企业采用率达34.4%，首次在B端市场超越OpenAI，标志着AI竞争进入下半场。</p>
+                    <div class="news-source">来源：<a href="#">头条新闻</a></div>
+                </div>
+                
+                <div class="news-card">
+                    <span class="news-tag">技术突破</span>
+                    <h3 class="news-title">IBM推出亚1纳米芯片技术</h3>
+                    <p class="news-summary">IBM宣布全球首款亚1纳米芯片技术，指甲盖大小的芯片集成近1000亿个晶体管，密度是2纳米芯片的两倍，性能提升50%，能效比提高70%，量产预计2028-2029年。</p>
+                    <div class="news-source">来源：<a href="#">Silicon Republic</a></div>
+                </div>
+                
+                <div class="news-card">
+                    <span class="news-tag">并购事件</span>
+                    <h3 class="news-title">SpaceX收购光网络公司Mesh Optical</h3>
+                    <p class="news-summary">SpaceX获FTC快速审批，收购光网络初创公司Mesh Optical Technologies，加强数据中心互联基础设施能力，马斯克称"两年内数据中心部署成本最低的地方将是太空"。</p>
+                    <div class="news-source">来源：<a href="#">Silicon Report</a></div>
+                </div>
+                
+                <div class="news-card">
+                    <span class="news-tag">标准制定</span>
+                    <h3 class="news-title">中国发布《智能体互联》7项国家标准</h3>
+                    <p class="news-summary">国家市场监管总局发布《人工智能 智能体互联》系列7项国家标准，加快智能体、具身智能、世界模型等前沿技术领域标准制定，明确智能体发展路线。</p>
+                    <div class="news-source">来源：<a href="#">头条新闻</a></div>
+                </div>
+                
+                <div class="news-card">
+                    <span class="news-tag">学术论文</span>
+                    <h3 class="news-title">华东师大发布多篇AI作为第一作者的论文</h3>
+                    <p class="news-summary">《华东师范大学学报》收录5篇以Deepseek、Gemini等AI为第一作者的论文，涵盖教师轮岗政策、认知支架、AI教育演进等主题，大规模实证研究显示AI定制化教学未能超越通用优质教学。</p>
+                    <div class="news-source">来源：<a href="#">澎湃新闻</a></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 趋势点评 -->
+        <section class="trend-section" id="trend">
+            <h2 class="trend-title">📊 今日趋势点评</h2>
+            <p class="trend-content">今日AI行业呈现三大关键态势：一是前沿模型发布首次遭遇政府前置审查，GPT-5.6和Mythos 5均被要求分阶段开放，标志着AI监管从后置整改转向前置安全评估；二是B端市场竞争格局生变，Anthropic凭借安全合规优势在年收入和企业采用率上首次反超OpenAI，验证了"稳定优于激进"的企业采购逻辑；三是技术生态加速分化，从芯片制造突破到智能体标准制定，从学术论文创新到数据中心太空部署，AI正在从单点能力竞赛转向全产业链生态构建。</p>
+        </section>
+        
+        <!-- 历史新闻时间线 -->
+        <section class="history-section" id="history">
+            <h2 class="section-title">📅 历史新闻时间线</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月27日</div>
+                    <h3 class="timeline-title">OpenAI发布GPT-5.6系列 | Anthropic模型解禁 | 中国发布智能体标准</div>
+                    <a href="26-06-27.html" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月26日</div>
+                    <h3 class="timeline-title">全球科技股暴跌 | SpaceX股价持续下跌 | ISC.AI 2026安全大会开幕</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月25日</div>
+                    <h3 class="timeline-title">苹果全球涨价20% | 芯片短缺传导至消费端</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月17-20日</div>
+                    <h3 class="timeline-title">DeepSeek完成500亿融资 | NVIDIA发布ENPIRE具身智能框架</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月12日</div>
+                    <h3 class="timeline-title">Anthropic Mythos 5/Fable 5被美国政府封禁</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月10日</div>
+                    <h3 class="timeline-title">Anthropic发布Claude Fable 5与Mythos 5双旗舰模型</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月8日</div>
+                    <h3 class="timeline-title">Google将AI Plus定价降至4.99美元 | 苹果WWDC发布全新Siri</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年6月1日</div>
+                    <h3 class="timeline-title">Anthropic秘密提交IPO招股书</div>
+                    <a href="#" class="timeline-link">查看详情 →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p class="footer-text">© 2026 AI Daily | 每日追踪AI行业动态 | 数据来源：公开新闻渠道</p>
+    </footer>
+    
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        
+        // 新闻卡片动态效果
+        document.querySelectorAll('.news-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
