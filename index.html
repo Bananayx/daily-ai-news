@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日AI晚报</title>
+  <style id="theme-vars">
+    :root {
+      --color-bg-background: #c5c9c9;
+      --color-bg-card: #d8dada;
+      --color-bg-popover: #d8dada;
+      --color-bg-muted: #d8dada;
+      --color-text-foreground: #111111;
+      --color-text-card-foreground: #111111;
+      --color-text-popover-foreground: #111111;
+      --color-text-primary-foreground: #ffffff;
+      --color-text-secondary-foreground: #ffffff;
+      --color-text-muted-foreground: #888888;
+      --color-text-accent-foreground: #ffffff;
+      --color-text-destructive-foreground: #ffffff;
+      --color-accent-primary: #111111;
+      --color-accent-secondary: #111111;
+      --color-accent-accent: #0040ff;
+      --color-accent-input: #ffffff;
+      --color-accent-ring: #000000;
+      --color-status-destructive: #d73333;
+      --color-status-success: #1a8a4a;
+      --color-status-warning: #b8860b;
+      --color-status-info: #0040ff;
+      --color-border-border: #ffffff;
+      --shadow-xs: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+      --shadow-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow-md: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow-lg: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow-xl: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --news-color-research: #0040ff;
+      --news-color-product: #1a8a4a;
+      --news-color-industry: #b8860b;
+      --news-color-policy: #d73333;
+      --news-color-opensource: #6b90ff;
+      --news-color-funding: #0040ff;
+      --news-color-event: #111111;
+      --news-color-opinion: #888888;
+    }
+    .dark {
+      --color-bg-background: #0a0a0a;
+      --color-bg-card: #1a1a1a;
+      --color-bg-popover: #1a1a1a;
+      --color-bg-muted: #333333;
+      --color-text-foreground: #ffffff;
+      --color-text-card-foreground: #ffffff;
+      --color-text-popover-foreground: #ffffff;
+      --color-text-primary-foreground: #000000;
+      --color-text-secondary-foreground: #ffffff;
+      --color-text-muted-foreground: #aaaaaa;
+      --color-text-accent-foreground: #ffffff;
+      --color-text-destructive-foreground: #ffffff;
+      --color-accent-primary: #ffffff;
+      --color-accent-secondary: #333333;
+      --color-accent-accent: #0040ff;
+      --color-accent-input: #1a1a1a;
+      --color-accent-ring: #333333;
+      --color-status-destructive: #ef4444;
+      --color-status-success: #34d399;
+      --color-status-warning: #fbbf24;
+      --color-status-info: #60a5fa;
+      --color-border-border: #333333;
+      --shadow-xs: 2px 2px 0 rgba(255,255,255,0.08);
+      --shadow-sm: 2px 2px 0 rgba(255,255,255,0.12);
+      --shadow: 2px 2px 0 rgba(255,255,255,0.12);
+      --shadow-md: 2px 2px 0 rgba(255,255,255,0.15);
+      --shadow-lg: 2px 2px 0 rgba(255,255,255,0.18);
+      --shadow-xl: 2px 2px 0 rgba(255,255,255,0.2);
+      --news-color-research: #60a5fa;
+      --news-color-product: #34d399;
+      --news-color-industry: #fbbf24;
+      --news-color-policy: #ef4444;
+      --news-color-opensource: #818cf8;
+      --news-color-funding: #60a5fa;
+      --news-color-event: #ffffff;
+      --news-color-opinion: #aaaaaa;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --color-chart-1: var(--color-chart-1);
+      --color-chart-2: var(--color-chart-2);
+      --color-chart-3: var(--color-chart-3);
+      --color-chart-4: var(--color-chart-4);
+      --color-chart-5: var(--color-chart-5);
+      --color-sidebar-foreground: var(--color-sidebar-foreground);
+      --color-sidebar-primary: var(--color-sidebar-primary);
+      --color-sidebar-primary-foreground: var(--color-sidebar-primary-foreground);
+      --color-sidebar-accent: var(--color-sidebar-accent);
+      --color-sidebar-accent-foreground: var(--color-sidebar-accent-foreground);
+    }
+    @layer base {
+      body { background: var(--color-background); color: var(--color-text-primary); }
+      td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+      th { @apply whitespace-nowrap; }
+    }
+  </style>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    [data-icon] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      background-color: currentColor;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased" style="font-family: 'Geist Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace; background: var(--color-bg-background); color: var(--color-text-foreground);">
+  <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 50; background: var(--color-bg-card); border-bottom: 2px solid var(--color-border-border); box-shadow: 2px 2px 0 rgba(0,0,0,1);" class="h-12 md:h-14">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px; height: 100%; display: flex; align-items: center; justify-content: space-between;" class="h-full">
+      <a href="#" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text-foreground);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2C8 2 5 5 5 9c0 2 1 4 3 5.5V18h2v-2h4v2h2v-3.5c2-1.5 3-3.5 3-5.5 0-4-3-7-7-7ZM9 10a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm6 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="var(--color-text-foreground)"/>
+          <path d="M8 20h8" stroke="var(--color-text-foreground)" stroke-width="2" stroke-linecap="square"/>
+          <path d="M9 22h6" stroke="var(--color-text-foreground)" stroke-width="2" stroke-linecap="square"/>
+        </svg>
+        <span style="font-size: 0.875rem; font-weight: 700; letter-spacing: -0.025em;" class="text-sm md:text-base font-bold tracking-tight">每日AI晚报</span>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 16px;" class="gap-4 md:gap-6">
+        <a href="#history" data-dom-id="nav-history" data-nav-key="history" style="font-size: 0.75rem; font-weight: 500; text-decoration: none; color: var(--color-text-foreground);" class="text-xs md:text-sm font-medium hover:underline">历史新闻</a>
+        <a href="#about" data-dom-id="nav-about" data-nav-key="about" style="font-size: 0.75rem; font-weight: 500; text-decoration: none; color: var(--color-text-foreground);" class="text-xs md:text-sm font-medium hover:underline">关于</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="padding-top: 64px;" class="pt-16 md:pt-20 pb-16">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;" class="px-4 md:px-8">
+      <section style="margin-top: 32px; margin-bottom: 48px;" class="mt-8 mb-12">
+        <div style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px; padding: 24px;" class="p-6 md:p-8">
+          <div style="margin-bottom: 16px;">
+            <span style="font-size: 0.875rem; font-weight: 700; color: var(--color-text-foreground);" class="text-sm md:text-base font-bold">2026.06.28 · 今日AI新闻</span>
+          </div>
+          <div style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px;" class="space-y-3">
+            <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground);" class="text-sm md:text-base leading-relaxed">
+              <span style="color: var(--color-accent-accent); font-weight: 600;">[研究]</span>
+              OpenAI发布GPT-5.6旗舰模型Sol，在编程、生物学和网络安全方面实现突破性提升，测评超越Claude Fable 5和Mythos 5；美国政府同日解除对Anthropic Claude Mythos 5的出口管制
+            </p>
+            <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground);" class="text-sm md:text-base leading-relaxed">
+              <span style="color: var(--color-status-success); font-weight: 600;">[产品]</span>
+              马斯克宣布xAI将不再作为独立公司，解散并入SpaceX；美国企业因成本压力集体转向DeepSeek，月省百万美元级别
+            </p>
+            <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground);" class="text-sm md:text-base leading-relaxed">
+              <span style="color: var(--color-status-warning); font-weight: 600;">[行业]</span>
+              英伟达27亿元收购Kumo AI补齐企业预测短板；Alphabet完成847.5亿美元AI基建融资，巴菲特100亿美元入局；Blackstone为Anthropic提供360亿美元芯片融资
+            </p>
+          </div>
+          <a href="2026-06-28.html" id="cta-today-news" data-dom-id="cta-today-news" style="display: inline-block; padding: 8px 24px; font-size: 0.875rem; font-weight: 700; text-decoration: none; background: var(--color-text-foreground); color: var(--color-border-border); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translate(-1px, -1px)'; this.style.boxShadow='4px 4px 0 rgba(0,0,0,1)';" onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='2px 2px 0 rgba(0,0,0,1)';">查看今日详情 →</a>
+        </div>
+      </section>
+
+      <section id="history" style="margin-bottom: 48px;" class="mb-12">
+        <h2 style="font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); margin-bottom: 32px;" class="text-lg md:text-xl font-bold">历史新闻</h2>
+        <div style="position: relative; margin-left: 16px;" class="ml-4 md:ml-8">
+          <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--color-text-foreground);"></div>
+          <div style="position: relative; padding-left: 32px; padding-bottom: 32px;" class="pl-8 md:pl-12 pb-8">
+            <div style="position: absolute; left: 0; top: 4px; width: 12px; height: 12px; transform: translateX(-5px); background: var(--color-text-foreground);"></div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted-foreground); margin-bottom: 4px;" class="text-xs font-bold">2026.06.27</div>
+            <div style="border: 2px solid var(--color-border-border); padding: 16px; background: var(--color-bg-card); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px;">
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground); margin-bottom: 8px;" class="text-sm leading-relaxed">GPT-5.6正式发布，Codex已取代ChatGPT成为OpenAI员工工作主界面；Alphabet宣布1800亿美元AI基础设施投资计划</p>
+              <a href="2026-06-27.html" style="font-size: 0.75rem; font-weight: 700; text-decoration: none; color: var(--color-accent-accent);" class="text-xs font-bold">查看详情 →</a>
+            </div>
+          </div>
+          <div style="position: relative; padding-left: 32px; padding-bottom: 32px;" class="pl-8 md:pl-12 pb-8">
+            <div style="position: absolute; left: 0; top: 4px; width: 12px; height: 12px; transform: translateX(-5px); background: var(--color-text-foreground);"></div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted-foreground); margin-bottom: 4px;" class="text-xs font-bold">2026.06.26</div>
+            <div style="border: 2px solid var(--color-border-border); padding: 16px; background: var(--color-bg-card); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px;">
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground); margin-bottom: 8px;" class="text-sm leading-relaxed">Anthropic完成650亿美元H轮融资，估值达9650亿美元超越OpenAI；科罗拉多AI法案即将于6月30日生效</p>
+              <a href="2026-06-26.html" style="font-size: 0.75rem; font-weight: 700; text-decoration: none; color: var(--color-accent-accent);" class="text-xs font-bold">查看详情 →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" style="margin-bottom: 48px;" class="mb-12">
+        <h2 style="font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); margin-bottom: 32px;" class="text-lg md:text-xl font-bold">关于</h2>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;" class="grid-cols-1 md:grid-cols-2 gap-4">
+          <div style="border: 2px solid var(--color-border-border); padding: 24px; background: var(--color-bg-card); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px;" class="p-6">
+            <h3 style="font-size: 0.875rem; font-weight: 700; color: var(--color-text-foreground); margin-bottom: 12px;" class="text-sm font-bold">关于本站</h3>
+            <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground);" class="text-sm leading-relaxed">一个由AI撰写的每日AI晚报。在 TRAE Work 的自动化 - Code模式使用提示词实现，每日17:00触发。</p>
+          </div>
+          <div style="border: 2px solid var(--color-border-border); padding: 24px; background: var(--color-bg-card); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px;" class="p-6">
+            <h3 style="font-size: 0.875rem; font-weight: 700; color: var(--color-text-foreground); margin-bottom: 12px;" class="text-sm font-bold">关于作者</h3>
+            <p style="font-size: 0.875rem; line-height: 1.625; color: var(--color-text-foreground);" class="text-sm leading-relaxed">懒得写</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer style="border-top: 2px solid var(--color-border-border); padding: 32px 16px;">
+    <div style="max-width: 1200px; margin: 0 auto; font-size: 0.75rem; color: var(--color-text-muted-foreground);" class="max-w-[1200px] mx-auto text-xs">
+      <p>内容由AI生成，请谨慎甄别。</p>
+    </div>
+  </footer>
+
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--color-border-border); background: var(--color-text-foreground); box-shadow: 2px 2px 0 rgba(0,0,0,1); border-radius: 0px; z-index: 50; opacity: 0; pointer-events: none; transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translate(-1px, -1px)'; this.style.boxShadow='4px 4px 0 rgba(0,0,0,1)';" onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='2px 2px 0 rgba(0,0,0,1)';" aria-label="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-border-border)" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7"></path>
+    </svg>
+  </button>
+
+  <script>
+    (function(){
+      var b = document.getElementById('back-to-top');
+      window.addEventListener('scroll', function(){
+        if(window.scrollY > 300){
+          b.style.opacity = '1';
+          b.style.pointerEvents = 'auto';
+        } else {
+          b.style.opacity = '0';
+          b.style.pointerEvents = 'none';
+        }
+      });
+      if(lucide && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    })();
+  </script>
+</body>
+</html>
