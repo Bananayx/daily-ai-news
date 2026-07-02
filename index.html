@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+        gap: 24px;
+      }
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      text-decoration: none;
+      transition: color 150ms;
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .hero-section {
+      padding: 32px 16px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .hero-section {
+        padding: 48px 0;
+      }
+    }
+
+    .hero-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .summary-card {
+        padding: 32px;
+      }
+    }
+
+    .news-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .news-item:last-of-type {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    .tag-row-home {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tag-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      line-height: 1.5;
+    }
+
+    .tag-industry-home {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .tag-research-home {
+      background: var(--chart-3);
+      color: #ffffff;
+    }
+
+    .tag-policy-home {
+      background: var(--destructive);
+      color: #ffffff;
+    }
+
+    .news-item h3 {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+
+    .news-item p {
+      font-size: 14px;
+      line-height: 1.625;
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+    }
+
+    .cta-container {
+      padding-top: 24px;
+      margin-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-btn {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      padding: 8px 16px;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .history-section {
+      padding: 32px 16px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .history-section {
+        padding: 48px 0;
+      }
+    }
+
+    .history-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .timeline-container {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline-line {
+      width: 2px;
+      background: var(--foreground);
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 32px;
+    }
+
+    .timeline-item:last-of-type {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      width: 16px;
+      height: 16px;
+      background: var(--foreground);
+      transform: translateX(-7px);
+      position: absolute;
+      left: -32px;
+      top: 0;
+    }
+
+    .timeline-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .timeline-date {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted-foreground);
+    }
+
+    .timeline-title {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      line-height: 1.625;
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+    }
+
+    .timeline-link {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .about-section {
+      padding: 32px 16px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .about-section {
+        padding: 48px 0;
+      }
+    }
+
+    .about-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .about-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .about-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+
+    .about-card h3 {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--foreground);
+      margin-bottom: 12px;
+    }
+
+    .about-card p {
+      font-size: 14px;
+      line-height: 1.625;
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="#" class="logo">每日AI晚报</a>
+      <div class="nav-links">
+        <a href="#history">历史新闻</a>
+        <a href="#about">关于</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero-section">
+      <h2>今日AI要闻</h2>
+      <div class="summary-card">
+        <div class="news-item">
+          <div class="tag-row-home">
+            <span class="tag-home tag-industry-home">行业</span>
+            <h3>OpenAI正式提交IPO申请，阿尔特曼放话"一年内上市"</h3>
+          </div>
+          <p>据TechCrunch报道，OpenAI已秘密向美国证监会提交IPO文件，CEO山姆·阿尔特曼在内部信中透露上市时间表为"未来12个月内"。此前OpenAI的估值已达3000亿美元，年化收入超120亿美元。</p>
+        </div>
+
+        <div class="news-item">
+          <div class="tag-row-home">
+            <span class="tag-home tag-industry-home">行业</span>
+            <h3>Anthropic估值9650亿美元反超OpenAI，秘密提交IPO</h3>
+          </div>
+          <p>据华尔街日报披露，Claude背后的公司Anthropic最新估值已飙升至9650亿美元，一举超越OpenAI成为AI领域估值最高的独角兽。公司预计今年将首次实现盈利，并已在秘密筹备IPO。</p>
+        </div>
+
+        <div class="news-item">
+          <div class="tag-row-home">
+            <span class="tag-home tag-policy-home">政策</span>
+            <h3>中国AI政策"三箭齐发"，2026正式进入制度落地期</h3>
+          </div>
+          <p>八部委联合发文，从消费端、平台端和金融端三个维度同时推进AI治理制度建设。这意味着中国AI行业从"野蛮生长"进入"有法可依"阶段，合规将成为每家AI公司的必修课。</p>
+        </div>
+
+        <div class="cta-container">
+          <a href="2026-07-02.html" class="cta-btn">查看全部新闻</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="history-section" id="history">
+      <h2>历史新闻</h2>
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2026.07.02</span>
+            <h3 class="timeline-title">OpenAI提交IPO、Anthropic估值破万亿、中国AI政策三箭齐发</h3>
+            <p class="timeline-desc">今日AI圈迎来历史性时刻：OpenAI和Anthropic争相冲刺资本市场，软银豪掷100亿美元押注OpenAI，英伟达发布RTX Spark芯片开启AI工厂时代，中国监管层密集出台AI治理政策。</p>
+            <a href="2026-07-02.html" class="timeline-link">查看详情 -&gt;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about">
+      <h2>关于</h2>
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>关于网站</h3>
+          <p>一个由AI撰写的每日AI晚报。在 TRAE Work 的自动化 - Code模式 使用提示词实现，每日17:00触发。覆盖重要产品发布、融资事件、技术突破、行业标准等AI行业热点新闻。</p>
+        </div>
+        <div class="about-card">
+          <h3>关于作者</h3>
+          <p>懒得写</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2025 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
