@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.03 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.03</h1>
+      <p class="date-subtitle">星期五</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>OpenAI实现重大技术突破，模型推理成本降低一半</h2>
+        <p>据新智元报道，OpenAI通过系统优化实现了重大技术突破，将模型推理成本降低了一半。这一突破将显著降低API调用成本，使得AI应用的大规模部署更加经济可行。</p>
+        <a href="http://m.toutiao.com/group/7658085932746261032/" class="source-link">信息来源: AI/GPU行业早报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>Anthropic与三星洽谈定制AI芯片，开启自研芯片竞赛</h2>
+        <p>继OpenAI与Broadcom合作推出Jalapeño芯片后，Anthropic开始与三星探索自研芯片。三星已是NVIDIA主要代工伙伴，三方关系微妙。这标志着AI大模型公司正从单纯算法竞争转向软硬件一体化竞争。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>微软成立25亿美元AI部署公司，6000名专家组成"AI军团"</h2>
+        <p>微软以25亿美元承诺成立自己的AI部署公司，6000名行业+工程专家组成，直接嵌入企业客户现场交付生产级AI代理系统。首批客户包括伦敦证交所、联合利华和埃森哲。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>Z.ai推出ZCode编程IDE，GLM-5.2正面挑战Cursor和Claude Code</h2>
+        <p>Z.ai推出ZCode编程IDE，支持macOS/Windows/Linux，支持BYOK，20+工具和多代理协作。GLM Coding Plan用户享1.5倍配额加成。GLM-5.2在编程竞赛中以远低于竞品的成本提供有竞争力的输出。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>Amazon为Echo/Fire TV自研AI芯片，降低对外部供应商依赖</h2>
+        <p>继Alexa+全面AI化后，Amazon进一步下探硬件层，开始为自家消费设备设计专用AI芯片。此举可降低对外部芯片供应商的依赖，提升端侧AI推理性能。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>阿里巴巴AI框架削99% Agent Token消耗，解决工具调用瓶颈</h2>
+        <p>阿里巴巴新AI框架不加载全部工具而是动态路由，Agent调用工具时的Token开销直降99%。当Agent面对成千上万个工具时，这套路由方案解决了核心瓶颈。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>清华与中科院联合研发康养转运机器人，可立点科技获战略融资</h2>
+        <p>可立点科技获得战略融资，聚焦"AI+机器人"养老场景，已推出主动陪伴机器人和康复助行转运机器人，均已完成工程样机开发。陪伴机器人具备健康监测、跌倒检测、语音情感识别等功能。</p>
+        <a href="http://m.toutiao.com/group/7658085932746261032/" class="source-link">信息来源: AI/GPU行业早报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>韩国考虑动用5万亿韩元增量税收，推进自主AI模型开发</h2>
+        <p>韩国科技信息通信部正讨论利用半导体繁荣带来的增量税收购买约1万个英伟达Vera Rubin GPU模块，并招募AI人才以推进自主AI模型开发。</p>
+        <a href="http://m.toutiao.com/group/7658085932746261032/" class="source-link">信息来源: AI/GPU行业早报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>前大疆科学家创业，硅羽科技半年内连获四轮数亿融资</h2>
+        <p>硅羽科技（SPARO）专注于通用空中智能，已获耀途资本、锦秋基金、阿里巴巴、弘毅投资等机构押注。公司构建了多模态感知、端到端小脑、世界导航模型大脑及灵巧作业与集群协同全栈技术体系。</p>
+        <a href="http://m.toutiao.com/group/7658085932746261032/" class="source-link">信息来源: AI/GPU行业早报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>OpenAI提议捐5%股份给美国主权财富基金，寻求政府支持</h2>
+        <p>Sam Altman向FT透露此方案，目的是"确保与政府良好关系并回应政治反弹"。需国会批准。Sanders参议员则提出更激进的50% AI企业股票税法案。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>Google AI扩建致2025年用电量暴增37%，清洁能源同步推进</h2>
+        <p>Google最新环境报告显示，AI数据中心的大规模扩建使公司总用电量一年暴涨37%，尽管公司称清洁能源努力也在同步推进。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>Quantum Systems无人机AI防御公司获12亿美元融资</h2>
+        <p>德国无人机+AI防御初创公司Quantum Systems在国防热潮中完成12亿美元融资，反映出AI+国防赛道的资本热度。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>HARC安全对齐框架发布，提升模型对抗越狱攻击能力</h2>
+        <p>将有害内容检测与拒绝响应进行联合优化，使模型在面对越狱攻击时更稳定地拒绝而非产生有害输出。对实际部署中的AI安全防护有直接工程价值。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-03</span>
+        </div>
+        <h2>FurnitureVLA让机器人学会组装家具，实现复杂操作任务</h2>
+        <p>MIT等团队提出FurnitureVLA，实现双臂机器人的长序列家具装配。将VLA模型从简单抓取推进到真实世界的复杂操作任务。</p>
+        <a href="http://m.toutiao.com/group/7658067846085247531/" class="source-link">信息来源: 今日AI速读 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业最显著的趋势是"软硬一体化"加速：OpenAI实现推理成本减半，Anthropic与三星洽谈定制芯片，微软成立25亿美元AI部署公司。这表明AI公司正从单纯的模型算法竞争，转向底层硬件、系统优化和落地能力的全面较量。</p>
+        <p>与此同时，AI应用场景持续拓展：阿里巴巴解决Agent Token消耗瓶颈，Z.ai推出编程IDE挑战Cursor，Amazon自研端侧AI芯片。这些产品级突破预示着AI正从"能用"走向"好用"，开发者和终端用户体验将持续提升。</p>
+        <p>资本方面，韩国政府动用税收推进自主AI开发、Quantum Systems获12亿美元国防AI融资，显示全球各国和资本对AI领域的投入持续加码。AI治理也在同步推进，OpenAI提议捐股份给主权基金正是这一背景下的回应。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2025 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
