@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.04 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.04</h1>
+      <p class="date-subtitle">星期六</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>北大联合团队发布全球首款相变忆阻器类脑芯片，AI运算远超GPU</h2>
+        <p>光明网今日正式披露成果，该神经动力学芯片单步运算时延仅2.12毫秒，脑机接口、具身智能场景运算速度较高端GPU提升50~478倍，突破传统算力硬件功耗瓶颈，为国产端侧、在轨AI硬件提供全新路线。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>国内AI芯片市场份额突破52%，国产算力进入主导周期</h2>
+        <p>行业统计数据今日对外公布，2026上半年国内AI芯片本土厂商市占率首次过半，英伟达国内份额下滑至45%；全年2万亿算力投资中，7800亿元资金将流向国产昇腾、平头哥等自研AI芯片产业链。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>阿里全面停用Claude Code，自研AI工具完成全替代</h2>
+        <p>行业媒体今日确认，阿里达摩院、阿里云全业务线下架海外Claude代码大模型，全面切换自研代码智能体，降低海外模型依赖，同步对外开放企业级代码AI服务能力。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>宇树科技科创板IPO注册生效，人形机器人板块全线大涨</h2>
+        <p>今日上交所公示注册结果，A股机器人板块超40只个股涨停；机构上调全年国内人形机器人出货量至5万台，工业、安防、巡检场景订单持续放量。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>SpaceX签下两大天价长期算力合约，年算力营收突破260亿美元</h2>
+        <p>7月4日行业完整曝光合作细节：Anthropic每月支付12.5亿美元租用Colossus算力集群，谷歌10月起每月9.2亿美元。SpaceX星链+AI算力业务年营收突破260亿美元，成为全球最大AI算力服务商之一。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>英伟达开源TwoTower双塔AI生成模型，文本生成速度提升2.42倍</h2>
+        <p>今日面向全球开发者免费开源，兼顾生成速度与图像、文本输出质量，大幅降低AI内容生成、代码辅助开发硬件门槛。该模型采用双塔架构设计，在保持高质量输出的同时实现了显著的性能提升。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>工信部持续公示《AI终端产品通用规范》，统一AIPC、AI手机算力标注标准</h2>
+        <p>全国AI终端以旧换新补贴政策稳定执行，单台设备最高补贴1500元，整治厂商虚标NPU算力宣传乱象。该规范旨在建立统一的AI终端产品算力评测和标注体系。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>北大+华为开源TaRO时序视频推理框架，面向多模态大模型开发者免费商用</h2>
+        <p>ICML 2026今日上线完整开源代码，解决长视频大模型时序推理薄弱痛点，大幅提升视频内容定位、事件识别精度，适配安防、影视AI生产、车载视觉开发场景。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>DeepSeek推出mlx-dspark苹果芯片原生工具，Mac本地大模型推理提速60%</h2>
+        <p>今日开源新版本适配M系列Mac设备，借助MLX框架重构解码逻辑，Qwen3、Gemma-4本地生成速度最高提升1.6倍，面向个人开发者、AI工作室免费开放下载。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>北京太空算力创新中心正式揭牌，天地一体化算力产业联盟成立</h2>
+        <p>2026全球数字经济大会分论坛重磅成果，聚焦星载AI芯片、在轨分布式计算、太空碎片智能监测，低轨卫星搭载国产玉龙AI芯片可在轨自主完成遥感图像处理。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>江波龙发布半年业绩预告，净利润预增超6万倍</h2>
+        <p>7月4日正式披露预告，AI服务器HBM、企业级存储需求爆发带动业绩暴涨，存储厂商优先供给算力客户，消费级闪存供给收缩，涨价预期持续强化。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>功率半导体开启二轮涨价，国内厂商涨幅15%-25%</h2>
+        <p>士兰微、斯达半导、扬杰今日同步执行调价，AI机柜800V碳化硅电源芯片需求激增，8英寸成熟晶圆产能持续紧缺，涨价周期预计延续至2027年。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>Micro LED光互连样品批量交付，国产算力高速互联实现弯道超车</h2>
+        <p>三安光电、华灿光电今日对外披露，Micro LED光互连样品已送达头部智算厂商，2027年实现商用，大幅降低AI服务器芯片互联延迟与功耗。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-04</span>
+        </div>
+        <h2>《美丽中国建设"十五五"规划》今日印发，算力园区风光储一体化改造明确指标</h2>
+        <p>文件要求2027年大型智算中心清洁能源供电占比突破60%，钠电储能、分布式光伏成为数据中心标配配套方案。这标志着AI基础设施绿色化转型进入加速期。</p>
+        <a href="http://m.toutiao.com/group/7658465260319343142/" class="source-link">信息来源: 科技新闻速览 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业最显著的趋势是国产替代加速与硬件创新突破：北大联合团队发布全球首款相变忆阻器类脑芯片，运算速度远超GPU；国内AI芯片市场份额首超52%，国产算力正式进入主导周期。这标志着中国AI产业正从应用层向底层硬件和核心技术全面突破。</p>
+        <p>与此同时，AI应用场景持续深化：阿里全面停用海外模型切换自研工具，宇树科技IPO加速人形机器人商业化，SpaceX签下天价算力合约。这些动态表明AI正从技术验证阶段进入大规模产业落地期，国产供应链自主可控成为行业共识。</p>
+        <p>政策层面，工信部统一AI终端算力标注标准、《美丽中国建设"十五五"规划》明确算力园区绿色化指标，显示监管正在构建覆盖技术创新、产业落地、可持续发展的完整体系。英伟达开源TwoTower模型则反映出全球AI生态正从封闭走向开放，技术普惠成为新趋势。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2025 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
