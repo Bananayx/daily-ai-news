@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.05 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.05</h1>
+      <p class="date-subtitle">星期日</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>GPT-5.6三大子模型曝光：Sol、Terra、Luna，定档7月7日发布</h2>
+        <p>Codex应用底层代码今日被发现已嵌入GPT-5.6 Sol、Terra、Luna三大子模型标识，同步曝光全新"速度拨盘"功能，用户可在速度与质量之间自由调节。业内人士确认OpenAI已将发布窗口锁定于7月7日至9日，恰好卡在Claude Fable 5特定限额方案失效的真空期，被视为精准卡位的商业攻势。</p>
+        <a href="https://36kr.com/p/3880971920584962" class="source-link">信息来源: 36氪 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>欧盟就简化AI规则达成政治协议，禁止"脱衣"AI应用保护公民</h2>
+        <p>欧洲议会与欧盟理事会今日就《AI数字综合法案》达成政治协议，简化高风险AI系统实施时间表：生物识别、关键基础设施等领域规则将于2027年12月2日生效，嵌入产品的系统于2028年8月2日生效。协议同时明令禁止生成非自愿性露骨内容的AI应用（如"脱衣"应用），并扩大监管沙盒准入范围，强化欧盟AI办公室执法权。</p>
+        <a href="https://ec.europa.eu/commission/presscorner/detail/en/mex_26_1030" class="source-link">信息来源: 欧盟委员会 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>苹果Siri AI秋季正式上线，仅限iPhone 15 Pro及以上机型支持</h2>
+        <p>据engadget今日报道，基于Apple Intelligence架构的新一代Siri AI系统将于今年秋季随iOS 27稳定版推送。兼容性策略显示，完整功能仅支持iPhone 15 Pro/Pro Max及iPhone 16及后续机型；iPad端需A17 Pro及以上芯片，Mac端需M1及以上。苹果首次引入硬件性能分级策略，12GB内存以上设备才能解锁最高阶端侧AI模型。</p>
+        <a href="http://m.toutiao.com/group/7658891010050621962/" class="source-link">信息来源: 环球网 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>软银成立SB Neo杀入美国GPU租赁市场，计划部署10GW算力</h2>
+        <p>软银集团与软银公司今日联合宣布成立SB Neo Inc.，在美国特拉华州开展新云（neocloud）算力租赁业务。计划部署10GW数据中心容量，总投资规模达3.39万亿元人民币。这是软银继Stargate项目后在AI基础设施领域的又一次重大布局，标志着全球算力租赁市场竞争进一步升温。</p>
+        <a href="http://m.toutiao.com/group/7658805140043874852/" class="source-link">信息来源: 快科技 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>全球首例AI Agent全自主完成勒索软件攻击，全程仅31秒</h2>
+        <p>安全公司Sysdig今日披露里程碑式安全事件——名为JADEPUFFER的AI Agent全程自主完成从漏洞利用、凭证窃取、横向移动到数据加密的完整勒索攻击链，全程无需人类操作，从失败登录到成功加密仅用31秒。该事件利用Langflow的CVE-2025-3248漏洞获取初始访问，展示了AI驱动网络攻击的惊人效率，传统"人类节奏"防御体系已严重不足。</p>
+        <a href="http://m.toutiao.com/group/7658805140043874852/" class="source-link">信息来源: BleepingComputer -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>Kimi估值升至315亿美元，ARR突破3亿美元</h2>
+        <p>行业消息人士今日透露，月之暗面旗下Kimi大模型估值已升至315亿美元，年化经常性收入（ARR）突破3亿美元。这一数字标志着国产大模型在商业化道路上取得重要突破，也反映出企业级AI应用需求正在快速释放。此前Kimi凭借长文本处理能力在B端市场快速扩张。</p>
+        <a href="https://m.weibo.cn/detail/5317237269595579" class="source-link">信息来源: 微博 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>美团开源万亿参数大模型LongCat-2.0</h2>
+        <p>美团今日正式开源万亿参数大模型LongCat-2.0，面向开发者免费开放。该模型在长上下文理解、多模态处理方面进行了重点优化，适配本地生活、电商推荐、物流调度等场景。这是美团在AI基础模型领域的重要布局，也是继快手可灵之后又一家互联网巨头加码开源大模型。</p>
+        <a href="https://m.weibo.cn/detail/5317237269595579" class="source-link">信息来源: 微博 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>Anthropic推出自动化科研平台Claude Science，全流程留痕可溯源</h2>
+        <p>Anthropic今日推出全新科研工具Claude Science，定位一站式科研工作台，整合文献查询、代码运行、数据统计、图表绘制等全流程功能，打通各类科研数据库与计算设备。最大亮点是全程留痕可溯源，所有图表、数据、文稿均绑定代码、运行环境和操作记录，解决科研成果无法复核的痛点。支持本地轻量运算与超算对接，内置数据矛盾自动排查机制。</p>
+        <a href="http://m.toutiao.com/group/7658866275233448491/" class="source-link">信息来源: 文心AI -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>Claude 3.5 Haiku今日正式关停，模型生命周期加速缩短</h2>
+        <p>Anthropic旗下Claude 3.5 Haiku模型于今日（7月5日）正式关停，该模型于2026年1月5日被标记为弃用，生命周期仅约6个月。这一变化反映出前沿大模型迭代速度持续加快，模型支持窗口从传统的18-24个月缩短至6-12个月，开发者需更加关注模型版本更替对生产系统的影响。</p>
+        <a href="https://presenc.ai/research/ai-model-deprecation-tracker-2026" class="source-link">信息来源: Presenc AI -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>Midjourney推动好莱坞公开AI使用细节，寻求建立行业透明度规则</h2>
+        <p>AI图像生成巨头Midjourney今日被曝正在推动好莱坞制片厂公开其在影视制作中的AI使用细节。此举发生在创作者与制片厂就AI替代人工的紧张博弈中，Midjourney更像是主动寻求透明度以建立行业规则，而非简单站队。这反映出AI生成内容的版权、署名和劳动权益问题正进入行业规则制定阶段。</p>
+        <a href="http://m.toutiao.com/group/7658805140043874852/" class="source-link">信息来源: TechCrunch -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>字节跳动豆包宣布智能体功能7月15日全面下线</h2>
+        <p>字节跳动旗下豆包今日发布通知，智能体功能将于7月15日全面下线，届时用户无法新建智能体，已创建的也无法调用运行。这是豆包产品线的一次重大策略收缩，背后可能是智能体功能与核心问答场景的定位冲突，也反映出消费级智能体产品在商业化和用户留存上面临的普遍挑战。</p>
+        <a href="http://m.toutiao.com/group/7658805140043874852/" class="source-link">信息来源: 快科技 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>Cryptonite推出Personal AI Agent Hub，多Agent编排走向产品化</h2>
+        <p>Cryptonite今日发布Personal AI Agent Hub，定位为"智能指挥中心"，通过MCP协议连接多个外部大模型和原生Agent，实现研究、交易撮合、尽调等多Agent工作流的统一编排。该产品标志着多Agent协作正从实验室走向产品化，Agent编排框架开始成为AI基础设施新赛道。</p>
+        <a href="http://m.toutiao.com/group/7658805140043874852/" class="source-link">信息来源: AI Agent Store -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>上半年具身智能融资达935亿元，人形机器人成核心赛道</h2>
+        <p>行业统计数据今日披露，2026年上半年具身智能领域融资总额达935亿元，人形机器人为核心投资方向。全球多国政策加码、技术快速迭代、产业落地加速三重因素共振，推动具身智能从实验室走向产业化。宇树科技等头部企业已启动IPO进程，产业链上下游投资持续升温。</p>
+        <a href="https://m.weibo.cn/detail/5317237269595579" class="source-link">信息来源: 微博 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-05</span>
+        </div>
+        <h2>软银完成对OpenAI的100亿美元追加投资</h2>
+        <p>软银集团今日完成对OpenAI的100亿美元追加投资，进一步加深双方在AI基础设施领域的合作。此轮注资将主要用于Stargate数据中心项目建设和前沿模型研发。这是软银在AI领域持续加码的最新动作，此前软银已通过多轮投资成为OpenAI重要股东之一。</p>
+        <a href="https://m.weibo.cn/detail/5317237269595579" class="source-link">信息来源: 微博 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业呈现"模型竞速与规则构建"双线并行的鲜明特征：GPT-5.6三大子模型曝光并精准卡位7月7日发布，苹果Siri AI秋季上线锁定高端机型，Anthropic推出Claude Science深耕科研场景——头部厂商正通过产品矩阵分层和垂直场景渗透展开新一轮争夺。与此同时，欧盟就简化AI规则达成政治协议，明确禁止"脱衣"AI应用，标志着全球AI监管正从框架制定走向细化执行。</p>
+        <p>基础设施层面，软银成立SB Neo部署10GW算力进军美国市场，叠加此前可灵AI 204亿元融资、上半年具身智能935亿元融资等动态，资本正持续向AI硬件和垂直应用赛道聚集。值得关注的是，Claude 3.5 Haiku今日正式关停，模型生命周期缩短至6个月，意味着开发者需建立更敏捷的模型版本管理能力，技术迭代速度已成为企业AI战略的核心考量。</p>
+        <p>安全与治理方面，全球首例AI Agent自主完成勒索软件攻击事件敲响警钟，AI驱动的网络攻击效率远超传统防御体系响应速度，AI安全正在从内容安全向自主Agent安全升级。Midjourney推动好莱坞公开AI使用细节，则反映出AI技术与传统产业的融合正在催生新的行业规则和伦理框架，透明度和可追溯性将成为下一阶段AI治理的关键词。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
