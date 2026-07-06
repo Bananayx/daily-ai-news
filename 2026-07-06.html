@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.06 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.06</h1>
+      <p class="date-subtitle">星期一</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>华为昇腾9100正式发布，单卡300P算力对标海外顶尖芯片</h2>
+        <p>华为新一代AI训练芯片昇腾9100今日正式亮相，直接刷新国产训练芯片算力纪录。芯片单卡FP16算力高达300P，专为千亿级大模型训练优化，深度适配昇思开源框架，单机柜算力密度直接提升2倍。配套推出中小企业轻量化算力租赁套餐，大幅降低本土企业大模型训练成本。业内评价：国产AI芯片终于具备和英伟达正面竞争的实力。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>ICML 2026杰出论文奖公布，清华阿里联手拿下最高奖</h2>
+        <p>ICML 2026杰出论文奖今日在韩国首尔正式公布，清华大学黄高团队与阿里巴巴合作的论文《灵活性陷阱：重新思考扩散语言模型中任意顺序的价值》荣获杰出论文奖。该论文提出极简算法JustGRPO，在GSM8K数学推理数据集上准确率达89.1%，同时完整保留扩散模型并行解码优势。另一篇MIT与耶鲁大学合作的扩散模型采样算法论文也获此殊荣，扩散模型成为本届最大赢家。DeepMind十年前经典强化学习论文获时间检验奖。</p>
+        <a href="https://36kr.com/p/3883532461961473" class="source-link">信息来源: 36氪 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>OpenAI秘密递交IPO申请，目标估值1万亿美元</h2>
+        <p>海外媒体独家爆料，OpenAI已向美国SEC秘密提交IPO上市申请，目标估值高达1万亿美元，预计今年秋季正式登陆资本市场。本次上市由高盛、摩根士丹利联合承销。2025年OpenAI全年营收130亿美元，同比实现翻倍增长，GPT系列API调用量持续走高，全球企业付费客户突破百万。若顺利上市，OpenAI将一举成为全球估值第一的AI企业。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>Anthropic豪掷150亿美元，澳洲打造1.4GW巨型算力中心</h2>
+        <p>AI巨头Anthropic今日官宣百亿级算力基建项目，计划在澳大利亚修建一座1.4GW超大型算力中心，总投入150亿美元。项目依托当地绿色电力打造亚太核心算力支点，2027年底可投产1GW规模算力。Anthropic同时和SpaceX达成深度合作，借助星链卫星搭建天地一体化AI算力网络。1.4GW供电规模等同于一座中型城市日常用电量，海外算力军备竞赛进入白热化阶段。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>研究人员借助AI技术发现两种新型超导体，登《物理评论·研究》</h2>
+        <p>芬兰阿尔托大学参与的国际研究团队今日宣布，利用人工智能技术发现两种新型超导体，为更高效筛选和研发超导材料提供了新的技术路径。研究团队首先利用AI对大量可能的元素组合进行预筛选，缩小候选材料范围，随后对有前景的候选材料开展有针对性的计算。通过该方法识别出的两种新型超导体，其超导性源于"笼目晶格"二维晶格结构，并已通过实验测试确认。相关研究论文发表于美国学术期刊《物理评论·研究》。</p>
+        <a href="http://www.xinhuanet.com/tech/20260706/0071f027297545968c50d84fdd33b148/c.html" class="source-link">信息来源: 新华网 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>英伟达重磅开源百万卡集群通信协议MRC，国内开发者可免费商用</h2>
+        <p>英伟达今日全球开源MRC百万卡级集群通信协议，专门解决超大规模AI集群跨节点延迟过高痛点。搭载该协议后，大模型整体训练效率提升25%，同时完美兼容昇腾、英伟达混合算力集群调度。利好国内产业：所有国内开发者均可免费商用，适配智算中心、航天星载AI等多类开发场景。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>金山云7月12日起算力价格上调15%-50%，算力涨价潮来袭</h2>
+        <p>金山云今日发布算力调价通知，自7月12日起全平台算力售价上调15%-50%。券商解读背后逻辑：市场推理算力需求持续爆发，国产昇腾集群订单已经排到四季度；叠加上游HBM存储、GPU硬件成本持续走高，AI算力涨价已成大趋势。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>Meta加码AI硬件，全年资本开支最高1450亿美元，自研芯片三星2nm代工</h2>
+        <p>Meta今日更新全年资本开支规划，区间上调至1250-1450亿美元，全力押注AI硬件赛道。旗下自研MTIA AI芯片确定交由三星2nm工艺代工，三星拿下总额10万亿韩元芯片代工大单，下半年启动技术验证。机构分析：全球算力紧缺局面至少持续至2026年末，Meta开放闲置GPU租赁仅为补充收入，整体大规模硬件扩产计划不会改变。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>国产机器人出海爆单，前5个月出口近200亿元，人形机器人再夺冠军</h2>
+        <p>最新行业数据今日出炉，今年前5个月国产机器人出口总量1037.7万台，出口总额接近200亿元。出口品类中清洁机器人占比七成，工业、仿生机器人海外落地场景持续拓宽。同期RoboCup 2026人形机器人足球赛事，中国队成功卫冕。国产机器人正加速抢占全球市场份额，具身智能全球化进程提速。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>豆包、通义千问同步公告，AI智能体功能7月15日正式下线</h2>
+        <p>豆包、通义千问今日同步发布官方公告，平台内AI智能体功能将于7月15日正式下线。平台提醒所有用户，务必在7月15日前导出智能体对话记录与配置数据；10月15日后服务器将清空全部智能体相关存储内容。官方解释调整方向：未来将重心转向企业办公、生产力工具赛道，缩减C端用户自定义智能体相关业务。两大头部同步收缩业务，行业转型信号十分明显。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>美光93亿美金扩产日本工厂，全力量产HBM存储芯片</h2>
+        <p>存储龙头美光今日宣布投资93亿美元扩建日本广岛工厂，核心目标大规模量产AI刚需HBM存储芯片。日本政府最高提供500亿日元补贴支持，新工厂预计2028年夏季投产，产品供给全球各大AI服务器厂商。受AI服务器HBM需求暴涨带动，全球存储行业景气度拉满，线下消费级SSD、内存条同步迎来涨价潮。</p>
+        <a href="http://m.toutiao.com/group/7659260247139975721/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>上海交大发表8页论文质疑HBM必要性，提出异构内存调度方案</h2>
+        <p>上海交通大学与超睿科技研究团队今日发表题为《HBM Is Not All You Need》的论文，致敬经典Attention论文。研究发现Prefill阶段HBM带宽利用率不足3%，而Decode阶段则严重依赖内存带宽。论文提出在内存异构加速器上高效分离LLM服务的新架构，通过将不同计算阶段调度到不同内存特性的硬件上，大幅降低对昂贵HBM的依赖。该研究有望重塑AI推理硬件成本结构。</p>
+        <a href="http://m.toutiao.com/group/7659279236036854306/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>2026人工智能治理白皮书发布，系统阐述四大核心支柱</h2>
+        <p>国际数据和人工智能管理协会今日发布《2026人工智能治理白皮书》，系统阐述AI治理的四大核心支柱——伦理与价值观、合规与法律、安全与稳健、问责与监督。白皮书从全球主要法域监管要求出发，深入分析AI系统面临的主要安全威胁、伦理挑战和法律风险，提出覆盖全生命周期的治理模型、技术工具箱和成熟度评估体系，为组织机构决策者提供可操作的AI治理框架。</p>
+        <a href="https://m.book118.com/html/2026/0702/7022163140011126.shtm" class="source-link">信息来源: 原创力文档 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-06</span>
+        </div>
+        <h2>ICML立场论文获杰出奖：对齐社区正在无意中构建审查工具箱</h2>
+        <p>ICML 2026杰出立场论文奖今日揭晓，Sarah Ball和Phil Hackemann的论文《立场：对齐社区正在无意中构建一个审查工具箱》获奖。该论文分析了当下的各项对齐技术，发现恶意主体可轻易利用其实施信息审查与舆论操控。论文指出，对齐技术的发展正在形成一把双刃剑——既可以用于安全防护，也可能被滥用于压制言论自由，引发业界对AI技术双重用途的深刻反思。</p>
+        <a href="https://36kr.com/p/3883762131448068" class="source-link">信息来源: 智东西 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业呈现"算力大战全面爆发+国产芯片迎来分水岭"的双线格局：华为昇腾9100正式发布标志着国产AI芯片首次具备与海外顶尖产品正面竞争的实力，而Anthropic 150亿美元建澳洲算力中心、Meta资本开支上调至1450亿美元、美光93亿美元扩产HBM，则印证了全球算力军备竞赛已进入白热化阶段。算力供需失衡直接推动金山云涨价15%-50%，算力从"技术指标"变成"硬通货"的趋势愈发明显。</p>
+        <p>学术研究领域同样精彩纷呈：ICML 2026今日开幕，清华阿里联手拿下杰出论文奖，扩散模型成为最大赢家，JustGRPO算法在数学推理上的突破为扩散大语言模型发展指明新方向。而上海交大"HBM不是必须的"研究则从底层架构层面挑战现有硬件成本结构，AI辅助发现新型超导体更是展现了AI在基础科学研究中的巨大潜力，AI正从"被研究对象"转变为"研究工具"。</p>
+        <p>值得深思的是，ICML立场论文奖颁给了"对齐社区无意中构建审查工具箱"这一批判性研究，反映出学术界对AI技术双重用途的警觉。叠加豆包与通义千问同步下线C端智能体功能、7月15日《人工智能拟人化互动服务管理暂行办法》即将施行等动态，AI行业正从"野蛮生长"加速迈向"规范发展"，技术创新与治理完善的双轮驱动正在成为行业新常态。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
