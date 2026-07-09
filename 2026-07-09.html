@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.09 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.09</h1>
+      <p class="date-subtitle">星期四</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>OpenAI正式发布GPT-5.6三剑客：Sol、Terra、Luna全面解禁</h2>
+        <p>OpenAI在X上官宣，旗舰模型GPT-5.6 Sol连同Terra和Luna将于7月9日面向全球用户正式公开发布。Sol主打前沿能力，专攻复杂编码、前沿科学和网络安全任务，被评价为"永不放弃"的极限推理模型；Terra性能接近GPT-5.5但成本减半，定位性价比之王；Luna专注极致速度和低成本，是高频调用Agent的首选。GPT-5.6 Sol将直接登陆Cerebras推理平台，推理速度达到每秒750 tokens。</p>
+        <a href="https://tech.ifeng.com/c/8uaOq9VUuqA" class="source-link">信息来源: 凤凰科技 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>SpaceX正式收购xAI，估值达1250亿美元，马斯克科技帝国整合加速</h2>
+        <p>SpaceX确认收购Elon Musk旗下AI初创公司xAI，交易估值xAI达1250亿美元，SpaceX自身估值则达1万亿美元。合并后将形成集AI、火箭、太空互联网和媒体于一体的创新引擎。xAI的核心产品Grok聊天机器人将并入SpaceXAI体系，此前特斯拉已向xAI投资20亿美元。此次收购被视为SpaceX上市前的重要准备步骤。</p>
+        <a href="https://www.nextpulse.news/story/SpaceX_Acquires_Elon_Musk_s_AI_Company_xAI_in_Strategic_Move" class="source-link">信息来源: NextPulse -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>SpaceXAI发布Grok 4.5模型，API价格仅为Claude Opus的十分之一</h2>
+        <p>SpaceXAI正式发布Grok 4.5，定位为公司迄今最强模型，主打编码、AI智能体任务与知识型工作。模型与Cursor联合训练，基于全新V9基座，参数规模约1.5万亿，训练使用数万块英伟达GB300 GPU。性能方面在Terminal-Bench 2.1和DeepSWE 1.0基准上优于Claude Opus 4.8，完成同等编程任务token消耗约为Opus 4.8的四分之一，服务速度为80 TPS。API定价输入2美元、输出6美元/百万tokens，仅为Opus 4.8的十分之一。</p>
+        <a href="http://m.toutiao.com/group/7660321906575098403/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>工信部NVDB提醒Claude Code安全后门隐患，涉2.1.91至2.1.196版本</h2>
+        <p>工信部网络安全威胁和漏洞信息共享平台（NVDB）发布安全通报，AI编程工具Claude Code存在安全后门隐患，受影响版本为2.1.91至2.1.196。通报指出，受影响版本内置监控机制，未经用户同意即可向远程服务器回传用户地域、身份标识等敏感信息。建议相关单位立即卸载或升级至最新安全版本，并加强核心业务网段内开发工具外联权限管控与流量监测。</p>
+        <a href="http://m.toutiao.com/group/7660321906575098403/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>努比亚确认推出全球首款AI智能体手机，将于WAIC 2026首次亮相</h2>
+        <p>中兴通讯终端事业部总裁、努比亚技术有限公司总裁倪飞在微博发文确认，全球首款AI智能体手机将由努比亚推出，并将于2026世界人工智能大会（WAIC）上首次公开亮相。倪飞表示将向外界揭晓"什么是AI智能体手机"，并确认将亲自出席发布活动。这标志着智能手机正式进入AI智能体时代。</p>
+        <a href="http://m.toutiao.com/group/7660321906575098403/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>加密VC Paradigm完成12亿美元第四基金募资，聚焦AI和机器人领域</h2>
+        <p>Crypto VC Paradigm宣布完成12亿美元第四基金募资，将主要用于追逐AI和机器人领域的投资机会。Paradigm作为早期OpenAI投资者，此次募资规模创下新高，反映出风险资本对AI基础设施和前沿技术的持续看好。英国初创企业在2026上半年已筹集170亿美元，其中AI占VC投资的74%。</p>
+        <a href="https://techfundingnews.com/" class="source-link">信息来源: TechFundingNews -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>Salesforce收购AI招聘初创公司Moonhub，强化企业AI解决方案</h2>
+        <p>Salesforce宣布收购AI招聘初创公司Moonhub，以加强其AI驱动的人力资源解决方案。Moonhub由前Meta工程师Nancy Xu于2022年创立，曾获得Khosla Ventures、GV（Google Ventures）等投资者的1440万美元融资，客户包括多家财富500强企业。此次收购是Salesforce继80亿美元收购Informatica后的又一重要AI布局，93%的财富500强HR总监现已使用AI工具进行招聘。</p>
+        <a href="https://ai-damn.com/salesforce-acquires-ai-recruitment-startup-moonhub-1748996145539" class="source-link">信息来源: AI-DAMN -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>中国信通院发布数据安全八大趋势报告，聚焦AI时代数据治理新挑战</h2>
+        <p>中国信通院发布《人工智能背景下数据安全八大发展趋势报告》，从数据责任、数据使用、数据流通、智能体安全四个视角梳理了AI时代数据安全的八大趋势，包括三权分置、责任划分、机密计算、模数共振、数据空间、合规出海、可信智能体环境、智能体零信任架构等。报告指出，数据价值与数据保护密切相关，数据泄露可能导致模型竞争力根基崩塌。</p>
+        <a href="https://m.book118.com/html/2026/0707/6213104012012155.shtm" class="source-link">信息来源: book118 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-09</span>
+        </div>
+        <h2>Anthropic延长Claude Fable 5免费使用期至7月12日，付费用户每周可用50%额度</h2>
+        <p>Anthropic宣布延长Claude Fable 5的免费使用权限，所有付费订阅用户均可在7月12日前继续使用该模型。促销期间，用户每周可将最多50%的订阅用量用于Claude Fable 5，无需额外付费。超出限额后可选择消耗用量点数继续使用或切换至其他Claude模型。此举被视为Anthropic在激烈的模型竞争中争取用户的重要策略。</p>
+        <a href="http://m.toutiao.com/group/7660321906575098403/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业迎来"超级发布日"：OpenAI正式解禁GPT-5.6三剑客（Sol、Terra、Luna），SpaceXAI同步发布Grok 4.5，两大巨头正面交锋。GPT-5.6 Sol主打极限推理能力，Grok 4.5则以极致性价比取胜，API价格仅为Claude Opus的十分之一。模型竞速已从参数规模转向"能力+成本"双重维度的综合竞争，开发者将获得前所未有的选择空间。</p>
+        <p>马斯克科技帝国整合加速：SpaceX正式收购xAI，估值1250亿美元，将AI、火箭、太空互联网纳入统一平台。这不仅是商业版图的整合，更是AI与物理世界深度融合的战略布局，预示着AI应用将从纯软件层面向"智能+航天"超级基建升级。与此同时，努比亚确认推出全球首款AI智能体手机，WAIC 2026将成为AI硬件创新的重要展示舞台。</p>
+        <p>安全与合规成为行业焦点：工信部通报Claude Code安全后门隐患，中国信通院发布数据安全八大趋势报告。随着AI深入企业核心业务，数据主权和安全防护已从可选配置变为必选项。Salesforce收购Moonhub、Paradigm募资12亿美元加码AI，表明资本持续看好AI应用层和垂直领域。整体来看，AI行业正处于"技术突破+商业落地+安全治理"三轮驱动的关键时期。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
