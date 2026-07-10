@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.10 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.10</h1>
+      <p class="date-subtitle">星期五</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>OpenAI正式发布GPT-5.6系列模型，同步推出ChatGPT Work智能体</h2>
+        <p>OpenAI正式向全球用户开放GPT-5.6系列模型，包含旗舰版Sol、均衡版Terra与轻量版Luna，即日起通过ChatGPT、Codex及OpenAI API提供服务。Sol引入全新的"Ultra模式"，默认协调四个智能体并行处理复杂任务。同时推出ChatGPT Work原生智能体，可接收整体目标后自动拆解步骤，跨邮箱、日历、Slack、云盘、CRM等连续工作数小时。OpenAI宣布将于8月9日关停Atlas浏览器，将资源整合进ChatGPT桌面端与Chrome扩展。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162759916" class="source-link">信息来源: CSDN AI热点资讯日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>Meta发布Muse Spark 1.1编程模型，对标Claude Opus 4.8</h2>
+        <p>Meta CEO马克·扎克伯格亲自宣布推出最新AI模型Muse Spark 1.1及开发者API，定位为"强大的代理式AI和编程模型"。该模型宣称在部分领域击败其他前沿模型，定价非常低廉。Meta同时透露自研AI芯片"Iris"计划9月量产，2027年算力拟翻倍至14吉瓦。</p>
+        <a href="http://m.toutiao.com/group/7660757728662405683/" class="source-link">信息来源: 今日头条AI速递 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>苹果与PrismML接洽，270亿参数大模型有望塞进iPhone本地运行</h2>
+        <p>美国初创公司PrismML宣布成功将阿里巴巴开源模型Qwen 3.6的270亿参数版本从54GB压缩至不到4GB，并能在iPhone 17 Pro上无损性能运行。该模型能完成复杂对话、推理和软件编程等任务，开源版本将于近期开放下载。据报道，苹果公司已与PrismML进行了沟通，探索端侧AI部署的可能性。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162759916" class="source-link">信息来源: CSDN AI热点资讯日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>Ollama完成6500万美元B轮融资，月活开发者逼近900万</h2>
+        <p>明星开源项目Ollama宣布完成6500万美元B轮融资，月活开发者接近890万。Ollama作为AI编程基础设施的重要组成部分，此次融资将进一步推动其在本地大模型部署领域的发展。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162759916" class="source-link">信息来源: CSDN AI热点资讯日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>国内具身智能融资半年破900亿，投资逻辑从"后空翻"转向"搬砖头"</h2>
+        <p>钛媒体援引IT桔子数据报道，2026年上半年国内具身智能赛道融资总金额已超900亿元人民币，较去年同期提升约5倍；融资事件超300笔，同比增长137%。投资人越来越关注企业能否在真实产品线中证明价值，而非仅凭演示视频获得估值。工信部确认今年人形机器人整机产量有望突破10万台。</p>
+        <a href="https://blog.csdn.net/nndsb/article/details/162750447" class="source-link">信息来源: CSDN每日AI资讯 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>无界动力K15获工业级全域CE认证，开启全球批量交付</h2>
+        <p>无界动力宣布旗下第二代机器人K15已通过欧盟合规准入，成为全球首个获得工业级全域CE认证的具身智能机器人。公司全球近1亿美元的国内外订单已全面开启交付。无界动力实现了超1100 TOPS大小脑一体国产大算力计算平台的全栈自研。</p>
+        <a href="https://blog.csdn.net/nndsb/article/details/162750447" class="source-link">信息来源: CSDN每日AI资讯 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>前美联储主席伯南克加入Anthropic治理机构，参与监督AI风险</h2>
+        <p>前美联储主席伯南克正式加入Anthropic治理机构，将参与监督AI风险与公共利益相关事务。此举被视为AI行业加强治理和风险管理的重要信号，体现了监管层和科技公司在AI安全领域的合作趋势。</p>
+        <a href="http://m.toutiao.com/group/7660674608735076899/" class="source-link">信息来源: 华尔街见闻 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>粤港澳大湾区国产算力集群上线，昇腾万卡智算集群在韶关部署</h2>
+        <p>昇腾万卡智算集群在韶关正式上线，部署超万张昇腾国产AI加速卡，标志着国产大模型研发进入"算力自主"新阶段。该集群将为粤港澳大湾区的AI创新提供强大的算力支撑。</p>
+        <a href="http://m.toutiao.com/group/7660757728662405683/" class="source-link">信息来源: 今日头条AI速递 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>中国AI拟人化监管新规7月15日施行，部分智能体功能将下线</h2>
+        <p>《人工智能拟人化互动服务管理暂行办法》将于7月15日正式施行，受此影响，部分平台的拟人化互动类智能体功能将相继下线。新规旨在规范AI拟人化服务，保护用户权益和数据安全。</p>
+        <a href="http://m.toutiao.com/group/7660757728662405683/" class="source-link">信息来源: 今日头条AI速递 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>ACL 2026华人学者表现突出，三篇最佳论文一作均为华人</h2>
+        <p>计算语言学顶会ACL 2026的三篇最佳论文一作均为华人，杰出论文也几乎被华人包场。本届会议投稿量暴增45%，创下历史纪录，显示出华人学者在NLP领域的强劲实力。</p>
+        <a href="http://m.toutiao.com/group/7660757728662405683/" class="source-link">信息来源: 今日头条AI速递 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-10</span>
+        </div>
+        <h2>WAIC 2026将于7月17-20日召开，华为Atlas 950真机首展</h2>
+        <p>2026世界人工智能大会（WAIC）将于7月17-20日在上海召开，华为Atlas 950超节点真机将在大会首展。届时将有众多AI领域的前沿技术和产品亮相。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162759916" class="source-link">信息来源: CSDN AI热点资讯日报 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业呈现"全面落地"与"巨头分疆"的鲜明特征：OpenAI正式开放GPT-5.6系列三档模型并推出ChatGPT Work智能体，Meta同步发布Muse Spark 1.1，两大巨头在编程AI和智能体领域展开正面竞争。GPT-5.6 Sol引入Ultra多智能体并行模式，编程性能刷新SOTA，而ChatGPT Work的推出标志着OpenAI从"对话引擎"正式迈进"数字劳动力"阶段。</p>
+        <p>端侧AI迎来里程碑突破：PrismML成功将270亿参数大模型压缩至iPhone本地运行，苹果的接洽预示着终端设备AI能力将迎来革命性升级。与此同时，国内具身智能融资半年破900亿，无界动力K15获全球首个工业级CE认证，人形机器人正从"样品订单"走向"规模化海外销售"。国产算力集群的上线则为AI创新提供了坚实的基础设施支撑。</p>
+        <p>监管与治理层面同步收紧：中国AI拟人化新规即将施行，伯南克加入Anthropic治理机构，反映出全球对AI安全和伦理的重视程度不断提升。整体来看，AI行业正处于"技术突破+商业落地+安全治理"三轮驱动的关键时期，模型竞争已从参数规模转向"能力+成本+场景"的综合比拼。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
