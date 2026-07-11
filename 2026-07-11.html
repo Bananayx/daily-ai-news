@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.11 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.11</h1>
+      <p class="date-subtitle">星期六</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>苹果起诉OpenAI窃取硬件商业机密，AI硬件大战正式开打</h2>
+        <p>北京时间7月11日凌晨，苹果在美国加州北区联邦地区法院起诉OpenAI、其首席硬件官Tang Tan、前苹果电气工程师Chang Liu以及Jony Ive创办的io Products，指控OpenAI从"技术人员到首席硬件官"各层级协同窃取iPhone制造商的未发布产品、零部件、制造工艺与供应商关系等商业机密，用于开发消费级AI硬件。苹果要求法院判令OpenAI停止侵权、销毁所有涉密资料、并重新设计即将推出的硬件产品。OpenAI回应称"对其他公司的商业秘密没有兴趣"。同日，OpenAI"二号人物"Fidji Simo因神经免疫疾病恶化宣布离职。</p>
+        <a href="http://m.toutiao.com/group/7661064681763455503/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>宇树G1完成全球首例活体微创手术，登上《自然》封面</h2>
+        <p>加州大学圣地亚哥分校（UCSD）团队使用两台研究团队自研的"Surgie"机器人搭载宇树G1人形机器人，通过遥操作方式，为活体动物（猪）完成了腹腔镜胆囊切除术，使其成为全球首例在活体中走完一套标准微创手术流程的人形机器人。该成果已发表于顶级期刊《自然》（Nature），验证了人形机器人作为灵活、低成本手术助手进入手术室的可行性，未来有望服务偏远及特殊环境医疗。</p>
+        <a href="http://m.toutiao.com/group/7661071224465801738/" class="source-link">信息来源: AI日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>Meta发布Muse Spark 1.1编程模型，对标前沿编程模型</h2>
+        <p>Meta CEO扎克伯格亲自官宣推出Muse Spark 1.1模型及开发者API，定位为面向大规模Agent工作负载、Bug修复和遗留代码迁移的强代理式编程模型。官方宣称推理成本较Anthropic Fable 5低约十倍，正式加入AI编码助手赛道混战。与此同时Meta确认其自研AI训练与推理加速芯片"Iris"将于2026年9月启动量产，目标逐步降低对英伟达GPU的外部依赖。</p>
+        <a href="http://m.toutiao.com/group/7660935022408434227/" class="source-link">信息来源: 数智人每日必读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>中国社会科学院发布AI辅助科研规范，严禁10类AI辅助科研行为</h2>
+        <p>7月10日，中国社会科学院第三届学风和道德建设论坛在北京召开，发布了《中国社会科学院人工智能辅助科研基本规范（试行）》。《规范》以37条实操条款划定人工智能应用边界，明确使用准则，搭建保障体系。其中划定了10条刚性"禁用红线"，包括严禁利用AI从事违背社会主义核心价值观、危害国家安全的科研活动，严禁利用AI伪造数据、编造论据，严禁在学术研究中故意隐瞒AI使用情况等。</p>
+        <a href="http://m.toutiao.com/group/7661180241401922102/" class="source-link">信息来源: 中国青年报客户端 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>微软用自研MAI模型替换OpenAI/Anthropic，AI Coding进入"去第三方依赖"时代</h2>
+        <p>据Bloomberg报道，微软已在Excel与Outlook中用自研MAI模型替换OpenAI/Anthropic模型。MAI-Thinking 1在编程基准上匹配Claude Opus 4.8，每周数万次AI请求改由自家模型处理。这标志着AI巨头开始构建自主AI基础设施，减少对第三方模型的依赖，确保战略自主性和成本可控性。</p>
+        <a href="http://m.toutiao.com/group/7661071224465801738/" class="source-link">信息来源: AI日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>马斯克态度大反转，公开盛赞Anthropic旗下Mythos/Fable模型</h2>
+        <p>埃隆·马斯克在X上公开称赞Anthropic，称其为"AI领域的领导者"，并承认自己此前对该公司的判断"明显错误"。马斯克表示，目前没有任何公司发布过像Mythos/Fable这样出色的模型，并预计Anthropic很快将推出Mythos 2。这一表态与他此前的立场形成鲜明对比，去年9月马斯克曾断言Anthropic不可能获胜。</p>
+        <a href="http://m.toutiao.com/group/7661064681763455503/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>Anthropic任命前美联储主席伯南克为长期利益信托受托人</h2>
+        <p>Anthropic的长期利益信托（LTBT）任命前美联储主席、2022年诺贝尔经济学奖得主本·伯南克为最新受托人，与另三位受托人共同监督公司"以对社会长期有益的方式负责任开发先进AI"的使命。LTBT独立于管理团队与投资者，不持股、不分红，是Anthropic治理架构中的关键制衡机制。</p>
+        <a href="http://m.toutiao.com/group/7660935022408434227/" class="source-link">信息来源: 数智人每日必读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>特斯拉三代擎天柱初步定型，年底产能目标10万台</h2>
+        <p>据晚点LatePost报道，特斯拉Optimus Gen 3经马斯克评审通过、即将量产；供应链要求供应商9月产能达1000台/周、年底升至2000-2500台/周，届时年产能可达10万台。马斯克要求年底前实现产能目标，否则将调整整个Optimus采购团队，具身智能量产竞赛加速。</p>
+        <a href="http://m.toutiao.com/group/7660935022408434227/" class="source-link">信息来源: 数智人每日必读 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>曝腾讯拟买回Manus，计划成为其最大股东</h2>
+        <p>据《金融时报》报道，腾讯正考虑入股AI智能体初创公司Manus，并计划成为该公司的最大股东。知情人士透露，腾讯目前正与真格基金、红杉资本以及Manus管理层进行磋商，计划以20亿美元的价格从Meta手中买回Manus。交易完成后，腾讯预计将持有Manus最大比例的股份，但持股比例不会超过50%。</p>
+        <a href="http://m.toutiao.com/group/7661064681763455503/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-11</span>
+        </div>
+        <h2>《人工智能拟人化互动服务管理暂行办法》7月15日施行，平台同步调整</h2>
+        <p>《人工智能拟人化互动服务管理暂行办法》由国家网信办、国家发展改革委、工信部、公安部、市场监管总局联合公布，自7月15日起施行，是我国首部针对情感类AI拟人交互的专项立法，覆盖文字、图片、音频、视频形式的持续性情感互动服务。受此影响，豆包、通义千问等平台已宣布于7月15日同步下线用户自建智能体功能。</p>
+        <a href="http://m.toutiao.com/group/7660935022408434227/" class="source-link">信息来源: 数智人每日必读 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业迎来"硬件大战"与"治理升级"双重拐点：苹果起诉OpenAI窃取商业机密标志着AI巨头从"模型竞赛"正式跨入"终端争夺"阶段，OpenAI向硬件领域的扩张引发科技巨头间的法律对撞，人才流动的法律边界正在被重新界定。与此同时，马斯克对Anthropic态度的大反转和伯南克加入Anthropic治理机构，反映出AI行业在竞争白热化的同时，正加速构建企业治理和安全监督体系。</p>
+        <p>具身智能领域取得突破性进展：宇树G1完成全球首例活体微创手术并登上《自然》封面，证明人形机器人已具备进入高风险医疗场景的潜力；特斯拉三代擎天柱初步定型且年底产能目标达10万台，表明具身智能正从实验室快速走向规模化量产。国内监管同步跟进，中国社科院发布AI辅助科研规范划定10条红线，AI拟人化新规即将施行，显示出我国在AI伦理和规范方面的前瞻性布局。</p>
+        <p>微软用自研MAI模型替换OpenAI/Anthropic则预示着AI行业的一个重要趋势——科技巨头正在加速"去第三方依赖"，构建自主可控的AI基础设施。这不仅是成本和战略自主性的考量，更是供应链安全的必然选择。整体来看，AI行业正处于"技术突破+商业落地+安全治理+基础设施自主"四轮驱动的关键转型期，竞争格局正在重新洗牌。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
