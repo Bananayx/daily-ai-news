@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.12 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.12</h1>
+      <p class="date-subtitle">星期日</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>Meta豪掷91.7亿美元建加拿大AI数据中心，自研Iris芯片9月量产</h2>
+        <p>Meta宣布投资91.7亿美元（约130亿加元）在加拿大阿尔伯塔省建设首个加拿大AI数据中心，初始容量1GW，可扩展至1.8GW，耗电量相当于80万户家庭。同日Meta透露，其自研AI芯片"Iris"将于2026年9月正式量产，由博通参与联合设计、台积电代工，6周即完成缺陷测试且未发现重大问题。Iris是Meta MTIA第四代芯片项目的首款产品，未来计划每6个月推出一款新型号，目标2027年算力翻倍至14GW。Meta 2026年AI基础设施支出预计达1450亿美元，自研芯片旨在降低对英伟达GPU的外部依赖。</p>
+        <a href="https://www.vendordeep.com/report/meta-invests-17b-canada-data" class="source-link">信息来源: Vendor Deep -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>GPT-5.6 Sol Ultra一小时证明50年数学猜想"循环双覆盖猜想"</h2>
+        <p>OpenAI宣布，GPT-5.6 Sol Ultra在不到一小时内生成了"循环双覆盖猜想"（Circular Double Cover Conjecture）的证明，该猜想已困扰数学家近50年。这一突破标志着大模型在数学推理领域迈出关键一步，AI不再仅限于辅助计算，而是具备了独立解决重大数学难题的能力。循环双覆盖猜想是图论中的经典问题，与四色定理等著名数学问题有深刻联系。</p>
+        <a href="https://blog.csdn.net/qq_36729037/article/details/162809857" class="source-link">信息来源: CSDN - AI前沿日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>斯坦福团队发布全球首个通用生物医学AI代理Biomni，登《科学》封面</h2>
+        <p>国际顶刊《科学》（Science）在线发表重磅论文，斯坦福大学Kexin Huang等全球顶尖科研人员联合团队正式推出Biomni——全球首个通用型生物医学人工智能代理。Biomni可调用超过150种专业软件工具、105个顶尖软件包和59个权威数据库，自主完成从数据清洗、方案规划到代码执行、结果验证的全流程生物医学研究任务。在涵盖10项任务、443个查询的基准测试中，Biomni取得57%的平均准确率，远超基础LLM的30%和专业代理的25%。在罕见病诊断中准确率达60%且速度是人类专家的37倍，GWAS致病基因定位准确率达80%达顶级专家水平。</p>
+        <a href="http://m.toutiao.com/group/7661583843107701263/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>中国首个全国产十万卡AI超集群"曙光8000（登峰）"落成</h2>
+        <p>中科曙光在光合组织2026智能计算应用大会上宣布，中国首个全国产十万卡AI超集群"曙光8000（登峰）"正式落成，并同步接入国家超算互联网。该集群在芯片、计算系统、存储、网络等关键环节均采用国产设计，自研scaleFabric类IB原生RDMA高速网络实现十万卡集群高可靠连接，覆盖FP64到INT8全精度，已跑通300余项应用，标志着国产算力基础设施正式迈入"十万卡时代"。</p>
+        <a href="http://m.toutiao.com/group/7661458042533265983/" class="source-link">信息来源: 今日头条 - 周老师AI新闻速递 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>智谱AI启动"摸高计划"两年战略，聚焦AGI四大技术方向</h2>
+        <p>智谱AI创始人唐杰发布全员内部信《巨浪已来》，宣布启动"TouchHigh（摸高）"两年战略投入计划。未来两年不追求短期变现，聚焦四大技术方向：新一代记忆架构支撑跨月级别复杂任务执行、构建多智能体协作系统实现自主辩论与代码审查等全自动化、建设高质量合成数据工厂通过AI自博弈实现模型自主进化、投入百亿级资源攻坚机械可解释性安全治理。智谱认为AGI跨越需要翻越长程任务、自治智能体系统、完全自我训练和极致安全治理三座技术山峰。</p>
+        <a href="http://m.toutiao.com/group/7661458042533265983/" class="source-link">信息来源: 今日头条 - 周老师AI新闻速递 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>腾讯牵头20亿美元从Meta手中回购Manus，将成最大股东</h2>
+        <p>据新浪科技等多家媒体报道，腾讯正牵头一项总额约20亿美元的交易，计划从Meta手中回购AI智能体公司Manus，交易估值与Meta当初收购时一致。参与回购的还包括真格基金、红杉中国以及Manus管理层团队。交易完成后腾讯将成为Manus最大股东，但持股比例不超过50%，Manus将继续保持独立运营。此前国家发改委外商投资安全审查办公室禁止了Meta对Manus的收购，目前Manus大部分员工已迁至新加坡，年度经常性收入已接近5亿美元，较被收购时翻了超过4倍。</p>
+        <a href="http://m.toutiao.com/group/7661513179033240098/" class="source-link">信息来源: 今日头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>Google Voice十年来最大调整：推出付费订阅，下放Gemini AI功能</h2>
+        <p>Google Voice迎来十年来最大调整，首次推出每月10美元起的个人付费订阅计划。付费版将首次下放Gemini语音纪要等AI功能，强化智能通话体验。这是Google将AI能力下沉到更多产品的重要一步，也标志着Google语音服务从"纯免费"模式转向"免费+增值订阅"的商业化探索。</p>
+        <a href="https://blog.csdn.net/qq_36729037/article/details/162809857" class="source-link">信息来源: CSDN - AI前沿日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>工信部牵头制定生成式AI服务安全分级行业标准</h2>
+        <p>由工业和信息化部网络安全管理局提出、中国通信标准化协会归口的"人工智能 安全治理 电信和互联网生成式人工智能服务安全分级指南"行业标准项目（项目编号：2026-0461T-YD）正在制定中。该标准由中国信息通信研究院联合三大运营商等核心单位共同起草，将构建科学系统的安全分级框架，基于风险等级提出差异化安全管控要求，填补我国在生成式AI服务安全分级领域的标准空白，预计2026年正式发布。</p>
+        <a href="https://m.book118.com/html/2026/0711/8054130132010107.shtm" class="source-link">信息来源: 行业标准研究报告 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>许锦波团队MoleculeOS正式开放，AI生物研发进入操作系统时代</h2>
+        <p>许锦波团队的MoleculeOS正式开放，标志着AI生物研发进入"操作系统"时代。该系统将AI从单一的"计算工具"转变为研发流程的"组织者"，能够统筹调度各种生物计算工具和数据库，有望大幅提升分子研发效率。MoleculeOS的开放将为药物发现、蛋白质设计等领域提供统一的AI驱动研发平台。</p>
+        <a href="https://blog.csdn.net/qq_36729037/article/details/162809857" class="source-link">信息来源: CSDN - AI前沿日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>OpenAI招聘家庭产品经理，ChatGPT加速向家庭场景渗透</h2>
+        <p>OpenAI正在旧金山招聘专职家庭用户产品经理，专门负责为家庭、照护者和老年人构建跨产品线的体验，标志着ChatGPT战略重心从个人生产力工具向家庭场景延伸。数据显示，全球35岁及以上用户在ChatGPT中的占比已从一年前的26%上升至31%，美国近四分之一的父母智能手机用户在本季度使用了ChatGPT，远高于一年前的16%。</p>
+        <a href="http://m.toutiao.com/group/7661446411128504866/" class="source-link">信息来源: 今日头条 - 07月12日AI日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>月之暗面K2.7 Code高速版登陆Kimi Code，成为常驻模式</h2>
+        <p>月之暗面宣布K2.7 Code高速版结束Beta测试，正式成为Kimi Code平台的常驻可选模式。用户可在编程场景中选用该高速版模型，获得更快的响应速度。这是国内大模型厂商在代码生成领域的重要产品迭代，进一步丰富了开发者的工具选择。</p>
+        <a href="https://blog.csdn.net/qq_36729037/article/details/162809857" class="source-link">信息来源: CSDN - AI前沿日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-12</span>
+        </div>
+        <h2>TeraWulf签署190亿美元AI租约，6500万美元从比特币转向AI数据中心</h2>
+        <p>比特币矿业公司TeraWulf签署了价值190亿美元的AI数据中心租约，并将6500万美元从比特币挖矿业务转向AI数据中心领域。这一战略转变反映出AI算力需求的爆发式增长正在吸引传统加密货币矿业资本的大规模涌入，AI基础设施投资成为新的资本流向热点。</p>
+        <a href="https://jp.advfn.com/exchanges/COIN/BTCUSD/crypto-news/98904070/terawulf-inks-19b-ai-lease-strategy-shifts-65m" class="source-link">信息来源: ADVFN -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业呈现"算力基建大爆发"与"科学推理新突破"双重主线：Meta豪掷近百亿美元建设加拿大AI数据中心并宣布自研Iris芯片9月量产，标志着科技巨头自研芯片浪潮进入实质落地阶段，每6个月一代的迭代速度正在挑战英伟达的年度更新节奏；中国首个全国产十万卡超集群"曙光8000"落成，则意味着国产算力供应链实现了从芯片到网络的全栈自主突破。</p>
+        <p>科学研究领域迎来里程碑时刻：GPT-5.6 Sol Ultra一小时证明困扰数学家50年的"循环双覆盖猜想"，证明大模型已具备独立解决重大数学难题的能力；斯坦福Biomni登上《科学》封面，成为全球首个通用生物医学AI代理，在罕见病诊断、基因定位等任务中达到甚至超越人类专家水平，效率提升30至37倍。从数学推理到生物实验，AI正在从"辅助工具"进化为"科研主体"。</p>
+        <p>智谱"摸高计划"聚焦AGI四大方向、腾讯牵头20亿美元回购Manus、TeraWulf从比特币转向AI数据中心等事件，则从战略布局和资本流向层面印证了行业共识——AI正进入更深层次的技术竞赛与基础设施竞争期。叠加工信部制定生成式AI安全分级标准，行业在加速技术突破的同时，安全治理体系也在同步完善，"发展与安全并重"的格局愈发清晰。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
