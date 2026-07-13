@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.13 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --ring: #000000;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-title {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-subtitle {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trend-section {
+      padding-bottom: 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1 class="date-title">2026.07.13</h1>
+      <p class="date-subtitle">星期一</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>Anthropic企业AI支出份额首次超越OpenAI，Claude Code年化收入达25亿美元</h2>
+        <p>据企业支出管理平台Ramp最新数据，Anthropic以34.4%的企业AI支出份额首次超越OpenAI（32.3%），标志着企业AI市场格局发生根本性转变。Anthropic企业客户数量已超30万家，年化收入突破300亿美元，其中Claude Code单品年化收入达25亿美元，成为开发者领域增速最快的AI编程工具。这一变化反映出企业用户在AI选型上更加注重代码能力、安全合规和长上下文处理等实际工作场景的表现。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>美团发布LongCat-2.0万亿参数模型，全球首个基于5万卡国产算力集群全生命周期训练</h2>
+        <p>美团技术团队正式发布LongCat-2.0大模型，这是行业首个在5万卡国产算力集群上完成从训练到推理全生命周期的万亿参数模型。LongCat-2.0总参数达1.6万亿，动态激活范围330亿至560亿，平均激活480亿，从零构建原生支持100万token超长上下文窗口。架构专为Agentic Coding任务优化，在代码理解、生成和执行方面具备高效稳定表现。该成果标志着国产硬件支撑大规模AI模型训练的能力取得重大突破。</p>
+        <a href="https://aitoolly.com/ai-news/2026-07-13" class="source-link">信息来源: AIToolly -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>月之暗面发布万亿参数MoE模型Kimi K2并开源，推理成本降低40%</h2>
+        <p>月之暗面正式发布Kimi K2大模型，采用万亿参数MoE（混合专家）架构，支持128K上下文窗口。在Agent任务中表现超越Claude Sonnet 4，API调用量已突破100亿token。新模型推理成本降低40%，长文本处理效率提升3倍。Kimi K2的开源发布将进一步推动国内大模型生态的发展，为开发者提供更强的基础模型选择。此前月之暗面还与美国运通、中国农业银行联合发行了首张AI原生信用卡，探索AI算力与消费金融的结合。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>Meta以143亿美元入股Scale AI，AI数据服务赛道价值凸显</h2>
+        <p>Meta宣布以143亿美元入股AI数据标注服务商Scale AI，成为AI数据服务领域迄今为止最大规模的投资交易。该交易凸显了数据标注自动化与专业化在大模型训练链条中的核心地位，高质量训练数据已成为制约大模型性能提升的关键瓶颈。业内专家认为，数据服务已成为AI产业链的核心环节，资本的大规模加持将加速行业整合与技术升级，未来数据质量竞争将与模型架构竞争同等重要。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>阶跃星辰今晚19点召开发布会，将发布全球首款AI智能体手机与Agent OS</h2>
+        <p>阶跃星辰将于今日19:00召开"阶跃终端品牌暨新一代智能体战略发布会"，预计正式发布自有终端品牌、新一代智能体操作系统以及全球首款AI智能体手机。这是国内大模型头部企业首次完整定义"Agent OS"概念并落地消费级硬件。此前多家媒体已披露阶跃星辰即将发布AI终端品牌，并确认将在WAIC 2026上展示Agent操作系统。同期，上纬新材发布全球首款可变形个人机器人启元T1实机视频，可在轮足人形与四足形态间流畅切换，也将在WAIC上正式首发。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162838788" class="source-link">信息来源: CSDN - AI科技热点日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>可灵AI完成30亿美元融资，估值180亿美元成AI视频赛道最贵独角兽</h2>
+        <p>快手旗下可灵AI完成近30亿美元融资，腾讯参投，估值达180亿美元（约36倍ARR），成为AI视频生成领域估值最高的独角兽企业之一。可灵AI的生成视频作品已获得戛纳奖项，在视频生成质量和商业化方面均处于行业领先地位。AI视频赛道正迎来资本加速涌入期，高质量视频生成能力被视为下一代内容创作和虚拟现实的关键基础设施。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>WAIC 2026倒计时4天，科创AI指数走强，全球首款AI智能体手机将首秀</h2>
+        <p>距离2026世界人工智能大会（WAIC 2026）开幕还有4天，A股科创AI板块今日早盘集体走强，上证科创板人工智能指数上涨1.20%，恒玄科技涨7.50%、沐曦股份涨6.56%、寒武纪涨4.49%。大会核心看点持续曝光：努比亚联合字节跳动豆包团队打造的全球首款量产AI智能体手机将于7月17日大会开幕时首发，首批量产规模达50万台；海康威视将首次亮相WAIC，展示观澜大模型技术体系。AI商业化加速与算力景气上行成为板块上涨的核心驱动力。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162838788" class="source-link">信息来源: CSDN - AI科技热点日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>欧盟通用AI实践准则正式发布，千余利益相关方参与制定</h2>
+        <p>欧盟委员会于7月10日正式接收了由13位独立专家起草的通用AI实践准则最终版本，超过1000名利益相关方参与了制定过程。该准则旨在帮助行业合规《AI法案》，为通用AI模型的开发、部署和使用提供具体的实践指导。准则涵盖透明度、风险管理、数据治理、安全评估等多个维度，是全球首个针对通用AI的系统性实践指南，预计将对全球AI治理标准产生深远影响。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>腾讯混元Hy3正式版发布，三天登顶全球大模型排行榜</h2>
+        <p>前OpenAI研究员姚顺雨加入腾讯后推出的混元Hy3正式版发布，上线仅三天即在限时免费阶段升至全球大模型排行榜首位。该模型以低调方式发布，但迅速在开发者社区激起强烈反响。混元Hy3在推理能力、代码生成和多模态理解等方面表现突出，显示出腾讯在大模型技术上的快速追赶态势。国内大模型厂商的技术迭代速度正在不断加快，与国际领先水平的差距持续缩小。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>卡内基梅隆大学发布无标记化语言模型，推理速度提升40%</h2>
+        <p>卡内基梅隆大学Mamba团队发表最新研究论文，提出消除分词（Tokenization）步骤、直接处理原始字节流的新方法。实验结果显示，该方法使模型推理速度提升40%，内存占用减少32%，在医疗文本分析和代码生成任务中表现优异。无标记化（Tokenizer-Free）方法绕过了传统分词器带来的词汇表限制和计算开销，为大模型架构创新开辟了新方向，有望在端侧部署和低资源语言处理等场景中发挥重要作用。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>OpenAI CEO奥尔特曼修正"AI失业论"，公开承认AI正在创造新就业</h2>
+        <p>OpenAI CEO萨姆·奥尔特曼公开承认AI"目前正在创造新就业"，这一表态与他此前对AI可能导致大规模失业的悲观预期形成明显背离。奥尔特曼表示，AI技术的发展正在催生大量新型工作岗位，包括AI训练师、提示工程师、AI安全研究员等，同时也在传统行业中创造新的就业机会。这一观点的转变反映出AI产业正从技术探索期逐步进入商业化落地期，其对就业市场的实际影响正变得更加清晰和积极。</p>
+        <a href="https://blog.csdn.net/haohaizi_liu/article/details/162838788" class="source-link">信息来源: CSDN - AI科技热点日报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-13</span>
+        </div>
+        <h2>宇树科技发布Unitree R1人形机器人，起售价3.99万元刷新行业纪录</h2>
+        <p>宇树科技发布第三款人形机器人Unitree R1，约25公斤重，配备26个关节，支持多模态交互，起售价仅3.99万元。从2023年的59万元到如今的3.99万元，三年时间价格降幅超过93%，人形机器人的普及速度远超市场预期。价格的快速下探将推动人形机器人从工业场景加速进入商业和家庭消费场景，具身智能产业正迎来规模化落地的关键窗口期。</p>
+        <a href="http://m.toutiao.com/group/7661925424368386560/" class="source-link">信息来源: 今日头条 - AI行业日报 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-container">
+        <p>今日AI行业呈现"企业市场格局重塑"与"国产算力自主突破"双重主线：Anthropic企业支出份额首次超越OpenAI，打破了长期以来OpenAI一家独大的市场格局，Claude Code年化25亿美元的收入印证了开发者工具赛道的巨大商业价值，企业用户正从单纯追求模型能力转向注重工作流集成、安全合规和实际ROI。与此同时，美团LongCat-2.0在5万卡国产算力集群上完成万亿参数模型全生命周期训练，标志着国产算力供应链已具备支撑超大规模模型训练的能力，国产大模型自主可控迈出关键一步。</p>
+        <p>产品层面，月之暗面Kimi K2万亿参数MoE模型开源、腾讯混元Hy3登顶全球排行榜，国内大模型技术迭代速度持续加快，与国际前沿水平的差距不断缩小。阶跃星辰即将发布全球首款AI智能体手机与Agent OS，加上WAIC 2026倒计时带来的智能体终端热潮，AI正加速从云端走向终端，从对话交互走向智能体原生操作系统，"AI终端元年"的轮廓愈发清晰。</p>
+        <p>资本与治理层面，Meta 143亿美元入股Scale AI、可灵AI估值180亿美元，显示数据服务和AI视频成为资本竞逐的新赛道；欧盟通用AI实践准则正式落地，则标志着全球AI治理体系正在从框架走向实操。叠加OpenAI CEO修正"失业论"、宇树机器人价格下探至3.99万元等信号，AI产业正从技术驱动的概念期转向价值驱动的落地期，商业回报与社会影响正在同步显现。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
