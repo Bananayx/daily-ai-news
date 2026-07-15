@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.15 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        color: var(--primary-foreground);
+        border: 1px solid var(--primary-foreground);
+        padding: 6px 14px;
+        text-decoration: none;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+    }
+
+    .news-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: #0040ff;
+      color: #0040ff;
+    }
+
+    .tag-research {
+      border-color: #6b90ff;
+      color: #6b90ff;
+    }
+
+    .tag-policy {
+      border-color: #d73333;
+      color: #d73333;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: #386aff;
+      color: #386aff;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .source-link {
+        transition: none;
+      }
+    }
+
+    .trend-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-content p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026年7月15日</h1>
+      <p>星期三</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>OpenAI正式提交IPO申请，目标估值万亿美元冲击科技巨头地位</h2>
+        <p>OpenAI正式提交IPO申请文件，成为继Anthropic之后第二家冲刺资本市场的AI巨头。这家从非营利组织转型而来的公司，如今年营收已突破200亿美元，尽管预计2026年亏损将达140-250亿美元，但资本市场对其估值预期仍高达万亿美元。Altman在IPO声明中强调，上市将为实现"人人可用的个人AGI"愿景提供资源支持。</p>
+        <a href="https://ai-damn.com/openai-files-for-ipo-as-altman-pushes-vision-of-ai-for-all-1780978555348" class="source-link">信息来源: AI D A M N -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>Google向Anthropic追加投资最高400亿美元，深化AI战略同盟</h2>
+        <p>Google宣布向Anthropic投资最高400亿美元，首期投资100亿美元，剩余300亿美元取决于业绩里程碑。此项投资进一步巩固了双方的战略同盟关系，Anthropic将使用定制Google芯片和云计算服务。此前亚马逊已宣布向Anthropic投资50亿美元，并承诺在业绩达标后追加200亿美元。</p>
+        <a href="https://www.wam.ae/en/article/176tjwp-google-invest-40-billion-rival-anthropic" class="source-link">信息来源: WAM -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>Anthropic与三星洽谈定制AI芯片，降低每月12.5亿美元计算成本</h2>
+        <p>Anthropic正在与三星进行早期阶段洽谈，计划采用三星定制AI芯片运行Claude推理工作负载。定制芯片将帮助Anthropic降低其最大成本——计算开支，目前Anthropic每月向SpaceX支付12.5亿美元使用Colossus算力，同时还使用AWS Trainium和Google TPU。此外，Anthropic也在与微软就Maia 200推理芯片进行平行洽谈。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-july-15-2026" class="source-link">信息来源: AI Tools Recap -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>台积电6月营收创历史纪录达138亿美元，N3工艺全年售罄</h2>
+        <p>台积电6月营收达新台币4426.8亿元（约138亿美元），创公司近四十年历史最高月度营收纪录，同比增长68%。N3制造产线已全部预订至2026年底，CoWoS封装产能也已售罄。SemiAnalysis预计台积电全年AI芯片相关营收将超过400亿美元，AI硬件层持续增长与模型层降价形成鲜明对比。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-july-15-2026" class="source-link">信息来源: AI Tools Recap -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>Google发布Gemini Enterprise平台，原生集成Workspace访问控制</h2>
+        <p>在Google Cloud Next '26大会上，Google发布了扩展版Gemini Enterprise产品组合，提供统一平台用于构建、编排和治理企业AI智能体。Gemini智能体原生继承Workspace访问控制，无需新的安全审查。这标志着Google在企业AI治理领域的重大布局，与Anthropic的Claude Tag形成竞争态势。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-july-15-2026" class="source-link">信息来源: AI Tools Recap -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>《人工智能拟人化互动服务管理暂行办法》今日起正式施行</h2>
+        <p>我国首部AI拟人化互动服务专门立法《人工智能拟人化互动服务管理暂行办法》今日起正式施行。该办法对AI拟人化服务的提供主体、数据合规、内容审核等方面作出明确规定，旨在规范AI拟人化服务市场，保护用户权益和数据安全。2026年上半年国内AI赛道融资已突破3000亿元，政策规范将为行业健康发展奠定基础。</p>
+        <a href="https://m.sohu.com/a/1047855161_120685946/" class="source-link">信息来源: 搜狐新闻 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>Prime Intellect完成1.3亿美元A轮融资，投后估值达10亿美元</h2>
+        <p>AI基础设施公司Prime Intellect宣布完成1.3亿美元A轮融资，投后估值达10亿美元，正式跻身独角兽行列。该公司致力于帮助企业摆脱对外部AI实验室的依赖，通过一站式全栈开发平台赋予企业自主训练和部署定制化AI Agent系统的能力。本轮融资由Radical Ventures领投，Nvidia Ventures、Intel Capital等多家机构跟投。</p>
+        <a href="http://wap.hibor.org/wap_detail.aspx?id=1a93808734ae66e30bca65fb3d6bac73" class="source-link">信息来源: 华鑫证券研究 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-15</span>
+        </div>
+        <h2>Google CEO承认在AI编码领域落后竞争对手，加速追赶</h2>
+        <p>Google CEO Sundar Pichai公开承认公司在Agentic编码领域落后于竞争对手。他表示Google模型在文本、多模态、语音和推理方面领先，但在工具使用、指令遵循和长程任务方面存在差距。为此Google已组建AI编码突击队，Sergey Brin和DeepMind CTO亲自参与，计划通过Antigravity 2.0和Gemini 3.5 Flash组合缩小差距。</p>
+        <a href="https://www.frontiernews.ai/news/article/google-admits-its-behind-in-ai-coding-heres-what-t-3187b3b2" class="source-link">信息来源: Frontier News AI -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-content">
+        <p>今日AI行业呈现"资本盛宴+硬件重构+监管落地"三重格局：OpenAI和Anthropic相继冲刺IPO，Google和亚马逊竞相加码投资，标志着AI行业正式进入"万亿俱乐部"时代，资本对AI商业化前景的信心达到新高度。与此同时，Anthropic与三星的芯片合作洽谈、台积电创纪录的营收数据，显示AI算力基础设施正成为产业链中最具确定性的增长环节。</p>
+        <p>在竞争层面，Google承认在AI编码领域落后，反映出Agentic编码已成为AI竞争的核心战场。而《人工智能拟人化互动服务管理暂行办法》的正式施行，则为快速发展的AI应用市场提供了制度规范，平衡创新与安全的监管框架正在加速成型。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
