@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.17 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        color: var(--primary-foreground);
+        border: 1px solid var(--primary-foreground);
+        padding: 6px 14px;
+        text-decoration: none;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding-bottom: 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+    }
+
+    .news-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: #0040ff;
+      color: #0040ff;
+    }
+
+    .tag-research {
+      border-color: #6b90ff;
+      color: #6b90ff;
+    }
+
+    .tag-policy {
+      border-color: #d73333;
+      color: #d73333;
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: #386aff;
+      color: #386aff;
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .source-link {
+        transition: none;
+      }
+    }
+
+    .trend-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trend-section {
+        padding-bottom: 96px;
+      }
+    }
+
+    .trend-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trend-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trend-content p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&lt;- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026年7月17日</h1>
+      <p>星期五</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>Google Gemini 3.5 Pro正式发布，200万token上下文刷新行业纪录</h2>
+        <p>经历一个月的架构重建后，Google正式发布Gemini 3.5 Pro，配备行业领先的200万token上下文窗口，是Claude Opus 4.8的两倍、GPT-5.6的15倍以上。该模型针对前端编码和视觉推理进行了全面优化，引入Deep Think深度推理模式。同时发布的还有Nano Banana Pro图像生成模型，旨在夺回图像生成领域的领先地位。</p>
+        <a href="https://aifreetool.site/google-gemini-3-5-pro-launches-july-17-2m-context-and-a-full-rebuild/industry-trends/" class="source-link">信息来源: AIFreeTool -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>2026世界人工智能大会在上海开幕，全球治理高级别会议同步举行</h2>
+        <p>2026世界人工智能大会暨人工智能全球治理高级别会议今日在上海开幕，习近平主席出席开幕式并发表主旨讲话。来自100多个国家和国际组织的代表参会，大会以"智能伙伴 共创未来"为主题，就AI安全风险、数据治理、开源开放等议题达成共识，强调构建法律法规、技术监测、风险预警、应急响应体系。</p>
+        <a href="https://m.thepaper.cn/newsDetail_forward_33605025" class="source-link">信息来源: 澎湃新闻 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>Anthropic联合黑石推出15亿美元AI服务公司Ode，抢滩企业部署市场</h2>
+        <p>Anthropic携手黑石、Hellman & Friedman等私募巨头推出Ode with Anthropic，一家专注于企业AI部署的服务公司，融资规模达15亿美元。Ode以Anthropic此前收购的Fractional AI为基础，目标客户为社区银行、区域医疗机构和中型制造商。此举与OpenAI两个月前成立的40亿美元部署公司形成直接竞争，标志着AI行业竞争已从模型开发转向"最后一公里"部署。</p>
+        <a href="https://awesomeagents.ai/news/anthropic-blackstone-ode-enterprise-ai/" class="source-link">信息来源: Awesome Agents -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>OpenAI首款消费级硬件曝光：AI家庭伴侣智能音箱计划年底首秀</h2>
+        <p>OpenAI首款消费级硬件产品浮出水面，将是一款定位AI家庭伴侣的智能音箱，内置机械元件可自主产生动态动作，制造"生命感"。产品计划最快于今年底对外展示，2027年正式上市销售。不过苹果公司近期起诉OpenAI涉嫌窃取硬件商业机密，可能影响产品发售进度。</p>
+        <a href="http://m.toutiao.com/group/7663262858393813546/" class="source-link">信息来源: 头条 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>最新研究揭示：边缘VLM推理的真正能源瓶颈是输出token而非输入</h2>
+        <p>最新发表的研究论文颠覆了传统认知：边缘视觉语言模型的能源消耗并非由输入图像复杂度决定，而是由输出token数量驱动。研究发现推理功率几乎恒定，而较慢的逐token解码时间才是真正的能源瓶颈。这一发现将改变边缘AI效率优化策略，从优先压缩视觉token转向控制输出长度。</p>
+        <a href="https://feeds.transistor.fm/eye-on-ai-weekly-research-watch" class="source-link">信息来源: Eye on AI -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>欧盟AI法案修正案通过，高风险系统合规期限延至2027年12月</h2>
+        <p>欧盟理事会批准了数字综合法案中关于AI法案的修订条款，将高风险AI系统的合规期限从原定的2026年8月推迟至2027年12月。修正案明确了安全组件的判定标准，区分了AI安全功能与性能优化功能，同时新增了对生成非自愿性亲密内容的禁令，将于2026年12月生效。</p>
+        <a href="https://www.dlapiper.com/en-us/insights/publications/law-in-tech/2026/digital-omnibus-on-ai" class="source-link">信息来源: DLA Piper -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>SAGEAgent：首个成本感知的多模态癌症生存预测AI智能体</h2>
+        <p>SAGEAgent是一种自进化LLM智能体，能够逐个患者决定是否需要进一步诊断测试。该模型利用情景记忆和累积决策模式，在神经胶质瘤患者队列测试中保持竞争力预测准确性的同时，将诊断负担降低了55%。这一成果为临床决策支持提供了成本和负担感知的新范式。</p>
+        <a href="https://feeds.transistor.fm/eye-on-ai-weekly-research-watch" class="source-link">信息来源: Eye on AI -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="news-header">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-17</span>
+        </div>
+        <h2>AI并购浪潮席卷全球，高通、安森美、Salesforce等巨头密集出手</h2>
+        <p>2026年第二季度全球科技产业并购活跃，高通39.2亿美元收购AI基础设施企业Modular，安森美70亿美元并购边缘AI厂商Synaptics，Salesforce则以36亿美元收购智能客户代理平台Fin。这些交易围绕算力底座、边缘智能、行业垂直应用三条主线展开，反映出AI从单点技术向全行业底层生产力转型的趋势。</p>
+        <a href="http://m.toutiao.com/group/7658103137837466122/" class="source-link">信息来源: 头条 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trend-section">
+      <h2>今日趋势点评</h2>
+      <div class="trend-content">
+        <p>今日AI行业呈现"模型竞速+治理深化+资本落地"三重格局：Google Gemini 3.5 Pro以200万token上下文刷新行业纪录，标志着大模型竞争已进入"超长上下文+深度推理"的新阶段；WAIC 2026开幕与欧盟AI法案修订同步推进，全球AI治理框架正在加速完善。</p>
+        <p>Anthropic联合黑石推出Ode服务公司、OpenAI首款硬件曝光，显示AI巨头正从纯模型驱动转向"模型+部署+硬件"的全栈竞争。边缘AI能源瓶颈研究则为端侧AI优化指明了新方向，未来AI效率提升将更多聚焦于输出token控制而非输入压缩。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
