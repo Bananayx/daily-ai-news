@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.19 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn"><- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.07.19</h1>
+      <p>星期日</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>Kimi K3发布：2.8万亿参数全球最大开源模型，48小时自主完成芯片设计</h2>
+        <p>月之暗面发布Kimi K3——MoE架构2.8万亿参数（全球参数最大开源模型），原生支持视觉、100万Token上下文，激活896个专家中的16个压低成本；Arena.ai代码榜冲上第一，Frontend Code Arena 1679分全球居首；官方演示称仅用48小时自主完成45nm芯片设计（RTL到流片模拟全程无人工），成本仅为美国顶级模型的60%、训练效率近2倍。费半指数自高点回落逾20%跌入熊市，三周市值蒸发1.5兆美元。</p>
+        <a href="http://m.toutiao.com/group/7664045216336364067/" class="source-link">信息来源: AI日报 -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>WAIC具身智能进入"落地赛"：近60台真机上岗，首款可量产全尺寸人形交付</h2>
+        <p>2026世界人工智能大会上，具身智能展区取消了"机器人舞台"，取而代之的是1:1复刻产线和60台真机在会场实际工作。多款全尺寸人形机器人实现量产交付，标志着具身智能从Demo阶段跨入实际应用阶段。</p>
+        <a href="http://m.toutiao.com/group/7664045216336364067/" class="source-link">信息来源: AI日报 -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>百型智能发布企业级AI基础设施OntoZ，构建企业本体统一智能体决策</h2>
+        <p>百型智能在WAIC发布OntoZ企业本体基础设施，旨在建立能够理解企业、统一智能体决策，并根据真实业务结果持续进化的企业本体。系统通过智能体Harness明确执行边界，通过因果世界模型识别关键变量，已服务上千家中国出海企业，近千个智能体活跃在160多个国家。</p>
+        <a href="http://m.toutiao.com/group/7664169582915076658/" class="source-link">信息来源: 模速空间 -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 技术突破</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>Intel与Ultralytics合作，将YOLOv8引入边缘AI领域</h2>
+        <p>Intel与Ultralytics达成合作，将YOLOv8物体检测模型推向边缘AI设备，旨在让高度AI功能在更广泛的现场环境中得到应用，推动边缘AI技术的普及和落地。</p>
+        <a href="https://media-terminal.net/ai%E6%9C%80%E6%96%B0%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9%E3%81%BE%E3%81%A8%E3%82%81%EF%BD%9C%E7%94%9F%E6%88%90ai%E3%83%BBllm%E3%83%BBai%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88-106" class="source-link">信息来源: media-terminal -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>OpenClaw v7.1发布3天现243个P1致命Bug，AI编码工具可靠性引担忧</h2>
+        <p>OpenClaw v2026.7.1发布仅3天就涌入243个P1级致命Bug，包括Anthropic模型从选择器消失、Claude Code会话被误删、子Agent丢失权限等严重问题。全新安装相对稳定，但旧版升级用户严重翻车，引发行业对AI编码工具可靠性的深刻反思。</p>
+        <a href="http://m.toutiao.com/group/7664045216336364067/" class="source-link">信息来源: AI日报 -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>韩国年内推进安全特化AI开发，应对"米托斯冲击"</h2>
+        <p>韩国总统李在明表达了对"米托斯冲击"的担忧，韩国政府计划年内推进安全功能特化AI的开发，加强AI安全领域的自主研发能力。</p>
+        <a href="https://media-terminal.net/ai%E6%9C%80%E6%96%B0%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9%E3%81%BE%E3%81%A8%E3%82%81%EF%BD%9C%E7%94%9F%E6%88%90ai%E3%83%BBllm%E3%83%BBai%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88-106" class="source-link">信息来源: media-terminal -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 技术突破</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>快手AI芯片企业探索"非GPU"路线，抢占视频生成AI专用芯片商机</h2>
+        <p>随着视频生成AI的快速发展，专用芯片市场出现新商机。快手旗下AI芯片企业正在探索不依赖传统GPU的"非GPU"技术路线，试图在视频生成AI专用芯片领域占据先机。</p>
+        <a href="https://media-terminal.net/ai%E6%9C%80%E6%96%B0%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9%E3%81%BE%E3%81%A8%E3%82%81%EF%BD%9C%E7%94%9F%E6%88%90ai%E3%83%BBllm%E3%83%BBai%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88-106" class="source-link">信息来源: media-terminal -> </a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-19</span>
+        </div>
+        <h2>IDC发布DAA研究报告，提出日活智能体数为AI产业新度量指标</h2>
+        <p>IDC预发布《DAA研究报告》，系统提出"日活智能体数（DAA）"产业度量指标，预计2026年全球活跃智能体达7940万个，2030年增长至22.16亿个。该指标侧重智能体在业务流程中的实际价值创造，标志着AI产业评价逻辑从参数规模转向落地价值。</p>
+        <a href="https://blog.csdn.net/yuntongliangda/article/details/163021795" class="source-link">信息来源: CSDN -> </a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现"国产崛起+具身落地+可靠性挑战"三重格局：Kimi K3以2.8万亿参数全开源发布，不仅在代码能力上登顶全球，更展示了48小时自主芯片设计的Agent能力，直接引发费半指数暴跌20%，标志着"能力+成本双杀"的国产开源模型正在重塑全球AI估值体系。</p>
+        <p>与此同时，WAIC大会上具身智能从舞台演示转入实际产线部署，近60台真机上岗标志着从Demo到量产的跨越；但OpenClaw的243个致命Bug也敲响了警钟——AI工具已进入生产依赖阶段，可靠性正在取代跑分成为最硬的护城河。IDC提出的DAA指标则进一步印证了行业从技术竞速向价值落地的转向。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
