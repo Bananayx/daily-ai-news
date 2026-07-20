@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.20 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn"><- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.07.20</h1>
+      <p>星期一</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>Meshy完成近4亿美元B轮融资，AI 3D生成领域最大单笔融资诞生</h2>
+        <p>北京AI 3D生成创企Meshy宣布完成近4亿美元（约合人民币27.08亿元）B轮融资，投后估值超100亿元，刷新AI 3D生成领域迄今规模最大的单轮融资。本轮融资由IDG资本、经纬中国、Monolith砺思资本等顶级投资机构和战略投资方共同投资，红杉中国等现有股东超额跟投。资金将主要用于AI多模态模型研发和全球市场拓展。目前Meshy注册用户突破1200万，累计生成3D模型超1亿个，ARR一年增长12倍，全球前十科技公司半数为其客户。</p>
+        <a href="https://36kr.com/p/3902007640459145" class="source-link">信息来源: 智东西/36氪 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>工信部将印发算力标准体系建设指南，加快算电一体化布局落地</h2>
+        <p>工信部在国新办新闻发布会上宣布，将印发算力标准体系建设指南，推动建立算力服务能力评估、算力市场化定价等标准。近两年已围绕国家算力枢纽节点建设超70条算力大通道，相关算力枢纽节点间网络性能提升10%。下一步将持续按照点、链、网、面、体系化工作思路，优化算力基础设施资源部署，打造算力互联互通节点，提升算力资源利用效率，并加快光子、时空信息等新兴增长点培育，加速算电一体化布局落地。</p>
+        <a href="http://m.toutiao.com/group/7664537125614649883/" class="source-link">信息来源: 工信部/央视新闻 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>我国智能算力规模达2185EFLOPS同比增177%，AI开源大模型全球下载破百亿次</h2>
+        <p>截至2026年6月底，我国智能算力规模达2185EFLOPS，同比增长177%。规模以上制造业企业人工智能技术应用普及率超30%，人工智能开源大模型全球累计下载量突破100亿次。量子计算原型机"九章四号"刷新光量子信息技术世界纪录，全球首款侵入式脑机接口医疗器械获批上市。工信部表示将加快打通"科技—服务—产业"闭环，发布第二批111家重点培育中试平台，认定14家卓越级、402家标准级科技型企业孵化器。</p>
+        <a href="http://m.toutiao.com/group/7664537125614649883/" class="source-link">信息来源: 工信部/央视新闻 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>云天励飞发布三款云端大算力推理芯片，预测GPNPU成推理时代黄金标准</h2>
+        <p>云天励飞CEO陈宁在WAIC 2026上预测，GPNPU（通用可编程神经网络处理器）将成为推理时代的黄金标准，并同步推出三款云端大算力推理芯片。随着大模型推理需求爆发，专用算力架构正在经历从训练导向向推理导向的深刻转型。云天励飞此次发布的三款芯片瞄准不同推理场景，旨在为AI推理时代提供更高效、更灵活的算力支撑。</p>
+        <a href="http://m.toutiao.com/group/7664378807068492323/" class="source-link">信息来源: 1分钟AI观世界 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>三款AI Agent手机亮相WAIC，阶跃星辰发布STEPX品牌与Step AOS系统</h2>
+        <p>WAIC 2026上三款AI Agent手机集中亮相，包括努比亚NaviX Ultra、阶跃星辰STEPX Neo、荣耀RobotPhone，展现AI手机从智能助手向智能体原生终端的新趋势。阶跃星辰正式发布全球首款大模型原生AI终端品牌STEPX和智能体原生操作系统Step AOS，标志着AI手机进入"智能体即服务"的终端新时代。AI手机正从单纯的语音助手升级为能够自主执行任务、主动提供服务的智能终端形态。</p>
+        <a href="https://36kr.com/p/3903130292733832" class="source-link">信息来源: 36氪/WAIC 2026 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>前沿AI风险监测平台2.0发布，覆盖五类风险监测16家公司80多个模型</h2>
+        <p>在WAIC 2026前沿AI与智能体安全论坛上，安远AI联合相关机构发布前沿AI风险监测平台2.0，覆盖网络攻击、生物、化学、有害操纵和失控五类风险，目前已监测16家公司的80多个模型，相关风险测评基准数据库收录200多项测评基准。会上还发布了《前沿AI风险与应急响应研究报告（征求意见稿）》，聚焦前沿AI风险及其应急响应体系建设。图灵奖得主约书亚·本吉奥警告，当前安全保护措施的提升速度仍可能赶不上AI能力增长。</p>
+        <a href="http://www.xinhuanet.com/tech/20260720/3a9baa44d47d4765b62ce60accf9277e/c.html" class="source-link">信息来源: 新华网/经济参考报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>一目科技完成超10亿元E轮融资，估值破百亿</h2>
+        <p>一目科技宣布完成超10亿元E轮融资，投后估值突破百亿元人民币。本轮融资将主要用于研发投入和规模化生产。一目科技聚焦AI视觉感知与智能硬件领域，融资后将进一步扩大技术优势和市场布局，在AI感知技术商业化进程持续加速。</p>
+        <a href="http://m.toutiao.com/group/7664378807068492323/" class="source-link">信息来源: 1分钟AI观世界 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-20</span>
+        </div>
+        <h2>华东首个国产TPU智算千卡集群落地杭州，中国电信体系内首次大规模部署</h2>
+        <p>华东地区（杭州）首个国产TPU智算千卡集群在WAIC 2026期间正式落成，该项目由杭州电信、中兴通讯与中昊芯英联合打造，是中国电信体系内首个大规模国产TPU集群部署项目，也是华东地区首个国产TPU千卡级算力集群。同期，中国信通院正式启动"AISHPerf大模型训练与推理工程实践性能基准研究工作，聚焦千卡至万卡规模集群在训练与推理环节的核心性能瓶颈。</p>
+        <a href="http://m.toutiao.com/group/7664537125614649883/" class="source-link">信息来源: 第一财经/WAIC 2026 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现"资本爆发+算力基建+安全治理三线共振格局：Meshy以27亿元B轮融资刷新AI 3D生成赛道纪录，1200万用户和1亿个3D模型的积累标志着生成式AI正从文本、图片、视频向更复杂的3D内容加速渗透，ARR一年12倍增长印证3D生成已走出实验室进入规模化商业验证阶段。</p>
+        <p>与此同时，工信部连发算力标准与算电一体化政策，叠加智能算力规模同比暴增177%、开源大模型下载破百亿次，标志着中国AI产业正从模型竞速转向基础设施与标准话语权争夺；而前沿AI风险监测平台2.0和本吉奥的警告则提醒行业，AI能力狂飙的同时，安全治理必须从"补丁思维"转向"内生安全"，智能体时代的安全建设正在成为下一个核心赛道。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span>&copy; 2026 每日AI晚报</span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
