@@ -40,8 +40,7 @@
 
 注意index.html历史新闻部分，你要先查看已有哪些yy-mm-dd.html，时间线上只显示已有的
 
-每次你的任务触发时，都要更新index.html到最新状态，并新增最新的yy-mm-dd.html，旧的不要删。所有页面的页脚写© yyyy Banana Y.X.(链接指向https://bananayx.qzz.io),年份要更新到现在的年份。并且直接push到origin/main而不要提交PR
-
+每次你的任务触发时，都要更新index.html到最新状态，并新增最新的yy-mm-dd.html，旧的不要删。所有页面的页脚写“© yyyy Banana Y.X.”，链接指向https://bananayx.qzz.io，且在新标签页中打开，年份要更新到现在的年份。并且直接push到origin/main而不要提交PR
 ```
 
 
