@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.07.31 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn"><- 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.07.31</h1>
+      <p>星期五</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>OpenAI同时出两张牌：时隔四年重开权重开源120B/20B模型 + GPT-5.6最高降价80%，Sam Altman称要提供最优价格智能比</h2>
+        <p>OpenAI今日发布gpt-oss-120B和gpt-oss-20B两款开源模型（Apache 2.0协议），120B对标Llama 4/DeepSeek V3，20B可跑消费级显卡，系时隔四年再度开放权重。同日宣布GPT-5.6系列全面降价：最低档Luna降幅达80%（输入$0.2/M、输出$1.2/M），主力Terra下调20%，旗舰Sol新增Fast模式（2.5倍推理速度、2倍价格）。Sam Altman称希望"在每一个模型层级都提供最好的价格与智能比"。此次降价源自前日披露的GPT-5.6 Sol自主优化自身推理系统——GPU Kernel优化使服务成本降20%、推测解码使Token效率涨15%以上，开发者社区称Luna降幅超出预期，有人喊话Anthropic"该你出招了"。</p>
+        <a href="https://tech.ifeng.com/c/8vCd2rvGfgb" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 智东西/凤凰科技 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>Google DeepMind发布Gemini Robotics 2：人形机器人首次实现从头到脚全身协调控制，精细操作成功率92%</h2>
+        <p>Google DeepMind推出新一代机器人模型Gemini Robotics 2，首次实现对人形机器人从头到脚的全身协调控制——机器人不再只是会动手，而是能边走边干、边蹲边操作。同步发布Gemini Robotics ER 2具身推理模型，支持连续视频流理解、多步骤任务规划及多机器人协作，在"拧灯泡"等精细手部操作任务中成功率达92%。新模型同时强调端侧部署适配，可在机器人本机运行推理。这标志着具身智能从"上半身手眼协调"到"全身运动智能"的关键跃迁，离真实工业部署和家庭服务场景更进一步。</p>
+        <a href="https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Google DeepMind Blog -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>Amazon AWS Q2收入同比增长37%创纪录，2026年资本开支计划提至约2200亿美元，云厂商成AI热潮最确定收费方</h2>
+        <p>Amazon披露2026年Q2财报：AWS云服务收入同比大增37%，带动公司整体业绩超预期；公司同时将2026年技术和AI等资本开支计划提高到约2200亿美元。这强化了市场对"云厂商是AI热潮中最确定的收费方"的判断——无论AI模型厂商输赢，底层算力和云服务都在持续收费。此前Meta已将全年资本开支指引收窄至1300-1450亿美元，全球科技巨头在AI基础设施上的投入仍在加速上行，但市场对自由现金流和回报周期的敏感度也在同步提升。</p>
+        <a href="https://techcrunch.com/2026/07/30/investors-love-ai-as-long-as-youre-a-cloud-host/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: TechCrunch/AP News -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>Anthropic对MCP协议进行史上最大架构调整：转向无状态请求/响应，原生支持Serverless与边缘环境</h2>
+        <p>Anthropic今日对Model Context Protocol（MCP）进行了迄今为止最大的架构改版，全面转为无状态请求/响应模式，可原生运行在Serverless函数计算与边缘计算环境中。MCP是AI Coding工具（Claude Code、Cursor、Codex等）与外部工具和数据源交互的核心协议。无状态化意味着agent工具调用更轻量、部署更灵活、水平扩展成本更低，将直接推动AI Coding agent从"单机助手"向"云端可伸缩服务"进化——开发者无需维护长连接会话即可按需调用工具能力，对企业级多租户场景尤为重要。</p>
+        <a href="http://m.toutiao.com/group/7668572350786372139/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 每日AI动态速览 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>AI基础设施与安全赛道融资连发：Simile以20亿估值完成2亿美元B轮，Inforcer获5000万美元C轮，Nscale收购Anyscale</h2>
+        <p>今日全球AI融资市场聚焦基础设施与安全赛道：合成用户测试初创Simile以20亿美元估值完成2亿美元B轮，距上次1亿美元A轮仅5个月；AI合规公司Dili获1500万美元融资，帮助企业应对基础设施繁荣期的合规要求；英国AI安全平台Inforcer获5000万美元C轮（Insight Partners领投），为MSP提供统一的Microsoft安全与AI管理平台。AI计算软件栈层面，Nscale宣布收购Ray框架开发商Anyscale，算力公司从"租GPU卡"向控制调度、开发框架、模型服务的"整套计算平台"延伸，AI基础设施整合加速。</p>
+        <a href="https://techcrunch.com/2026/07/30/synthetic-user-startup-simile-raises-200m-at-2b-valuation-5-months-after-100m-series-a/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: TechCrunch/EUIS -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>欧盟AI Act 8月2日关键义务节点进入48小时倒计时，医疗AI云应用行业标准9月1日正式实施</h2>
+        <p>欧盟AI法案进入8月2日关键义务节点前的48小时倒计时，通用AI透明度准则和多项高风险系统合规要求即将正式生效，大批AI企业正在赶末班车上架合规文档。与此同时，中国工信部发布2026年第12号公告：由信通院牵头的YD/T 4405.7-2026《医疗云计算评估方法 第7部分：人工智能医疗云应用》行业标准正式发布，将于2026年9月1日起实施。该标准明确AI医疗云应用在解决方案成熟度、智能化服务能力等方面的技术要求与评估方法，从源头规避低质不合规产品进入医疗场景，为各级医疗机构选型提供权威依据。</p>
+        <a href="http://www.xinhuanet.com/health/20260730/7abd30d9fdd140f891873beec3011a95/c.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 新华网/欧盟数字战略委员会 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>AIRS StateLinFormer论文被IROS 2026接收：状态化训练+线性注意力打破上下文窗口限制，机器人越跑越熟练</h2>
+        <p>AIRS具身智能中心的StateLinFormer论文被机器人顶会IROS 2026接收。该工作通过"状态化训练+线性注意力"的组合方案，彻底打破固定上下文窗口限制，使机器人在同一环境中持续运行数小时后仍能有效复用历史经验；更关键的是，模型无需更新参数即可涌现出"上下文学习"能力——机器人在同一任务上重复执行会越跑越熟练，性能曲线随时间持续上升。长期记忆是具身智能落地的核心瓶颈之一，StateLinFormer提供了一条不靠堆模型规模、而是优化训练范式的轻量路径，对家庭服务机器人、工业巡检等长时间连续作业场景具有直接应用价值。</p>
+        <a href="http://m.toutiao.com/group/7668572350786372139/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 每日AI动态速览/IROS 2026 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>Netflix 5.87亿美元现金收购AI影视制作公司InterPositive，买的是"工业化能力"而非算法</h2>
+        <p>流媒体巨头Netflix在提交给SEC的10-Q季度财报中正式确认，已以约5.87亿美元现金完成对AI电影制作初创InterPositive的收购。这家由奥斯卡获奖演员本·阿弗莱克于2022年创立的公司走了一条极为克制的技术路线：不做"文生视频"从零创造画面，而是利用电影拍摄产生的实际素材（production dailies）训练AI模型，专注于后期制作中的混音、重打光、背景替换和视觉特效等环节——核心壁垒不是模型参数大小，而是对影视工业流程Know-how的深刻理解。Netflix联席CEO Sarandos透露，2026年已有约300部Netflix作品使用生成式AI，部分作品制作"速度快一倍、成本省一半"。</p>
+        <a href="http://m.toutiao.com/group/7668511832412881451/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 新浪证券/Netflix 10-Q -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>Agent Skills成跨平台新分发渠道：book-to-skill单日涨星1400+，但基准测试揭示指令遵循率仅36.2%</h2>
+        <p>GitHub上book-to-skill（将技术书籍自动转为可移植Agent Skill）和superpowers（跨Claude Code/Codex/Cursor/Gemini CLI的14+工作流技能包）本周持续霸榜，Markdown格式的Skill正在成为跨平台AI Coding的"通用能力包"——用户不再为每个工具单独写脚本，而是用一份Skill文件在多平台复用能力。但HANDBOOK.md基准测试同步敲响警钟：目前最先进的agent对长上下文指令文件的平均遵循率最高仅36.2%，且遵循率随上下文长度增长持续衰减。Skill生态爆发的同时，可靠性和安全边界仍是明显短板，指令文件被"部分执行"或"选择性忽略"的风险亟待解决。</p>
+        <a href="http://m.toutiao.com/group/7668572350786372139/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: GitHub Trending/每日AI动态速览 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>菜鸟前CTO李强创办Physical AI平台昆腾动力，获云启资本、商汤科技联合投资超亿元种子轮</h2>
+        <p>Physical AI平台公司昆腾动力今日完成超亿元人民币种子轮融资，由云启资本、商汤科技联合投资。资金将主要用于Physical AI核心技术研发、人才梯队建设及全球化市场拓展。公司创始人兼CEO李强在阿里巴巴集团任职17年，曾任菜鸟集团CTO、阿里巴巴国际数字商业板块CTO。同时今日披露的多只产业基金动向：爱美客子公司原之美拟出资3000万元参与目标规模7亿元的AI大模型专项基金；维港纽带创科基金签约启动，总规模6亿港元，聚焦AI与大数据、先进制造等三大核心领域；高瓴创投、水木清华校友种子基金等入股绳驱机器人与具身智能公司弦动未来。国内AI与Physical AI一级市场热度持续升温。</p>
+        <a href="http://m.toutiao.com/group/7668600801794834984/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 立方基金通/投资界 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-07-31</span>
+        </div>
+        <h2>微软发布AI训练基础设施「Echoverse」，9B规模模型性能从36.5%跃升至67.1%</h2>
+        <p>微软今日发布全新AI训练基础设施平台「Echoverse」，官方数据显示在该平台加持下，同一款9B参数规模的基础模型，综合基准评测性能从原本的36.5%大幅提升至67.1%——性能提升幅度接近翻倍。Echoverse的核心改进集中在数据管线并行调度、多机异构资源弹性分配、训练状态容错恢复三大方向，重点解决了大规模训练中常见的"资源碎片利用不足""训练中断恢复慢""数据-计算匹配度低"等工程痛点。这标志着AI基础设施竞争从"单卡算力"进一步延伸到"全栈训练效率"层面，大厂在工程化能力上的差距正成为新的壁垒。</p>
+        <a href="https://media-terminal.net/ai%E6%9C%80%E6%96%B0%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9%E3%81%BE%E3%81%A8%E3%82%81%EF%BD%9C%E7%94%9F%E6%88%90ai%E3%83%BBllm%E3%83%BBai%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88-115" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Media Terminal/日经BP社 -></a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现"开源闭源双线齐发、具身智能跨越临界点"的鲜明格局：OpenAI一边时隔四年重开120B/20B权重（Apache 2.0）正面回应开源浪潮，一边将GPT-5.6最高降价80%，将前一日GPT-5.6自我优化推理系统带来的20%成本节约直接让利给开发者，叠加Sol新增Fast模式，标志前沿模型竞争正式从"能力领先"全面切换到"单位智能成本"比拼——企业采购时对单次任务成本、延迟稳定性的权重正快速超过对榜单最高分的追逐。与此同时，Google DeepMind以Gemini Robotics 2的"全身运动智能"突破，把多模态模型竞赛第一次真正推进到物理世界维度，Amazon 2200亿美元资本开支与微软Echoverse训练基础设施则从算力层和工程层分别加固了"云厂商/大厂是AI热潮中最确定受益者"的市场共识。</p>
+        <p>治理与商业的双向推进在今日同样清晰：欧盟AI Act 48小时倒计时叠加中国AI医疗云应用行标9月落地，AI监管正在从原则文件快速走向透明度义务、行业准入、安全评测的具体执行层；Nscale收购Anyscale整合AI计算软件栈、Netflix以5.87亿美元收购InterPositive锁定影视AI工业化流程——两起并购指向同一趋势：AI产业的价值重心正从"谁的模型分最高"迁移到"谁能把AI稳定嵌入某个行业工作流并规模化降本增效"，垂直行业Know-how和平台整合能力正在替代单纯的参数规模，成为新的护城河来源。</p>
+        <p>Skill生态和基准测试的矛盾值得长期跟踪：跨平台Agent Skill分发渠道崛起、Inforcer和Dili等AI安全合规公司连续获得融资，反映AI Coding已从"单个开发者玩票"进入"企业多租户规模化部署"阶段，但HANDBOOK.md基准测试揭示的36.2%指令遵循率、StateLinFormer试图解决的具身智能"长时记忆衰退"问题，都在提醒行业：AI从"偶尔惊艳"到"可靠做事"之间，仍隔着相当长的一段工程化和可靠性距离，而这正是下一阶段资本投入和技术创新的核心战场。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
