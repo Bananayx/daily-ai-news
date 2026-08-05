@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.05 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.05</h1>
+      <p>星期三</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>SpaceX上市后首份财报超预期营收78亿美元，携手英伟达独家合作Starmind AI1算力卫星打造太空AI超级计算网络</h2>
+        <p>8月5日SpaceX发布6月12日上市以来首份季度财报，第二季度营收达78.14亿美元同比增长92%，AI板块收入26亿美元同比暴增247%，调整后EBITDA转正至11亿美元。同日SpaceX与英伟达联合官宣Starmind AI1卫星项目：双方将独家合作开发搭载英伟达Vera Rubin NVL72计算载荷的轨道AI数据中心卫星，每颗卫星配置Rubin GPU+Vera CPU组合，峰值算力150kW，计划2027年发射原型卫星、2028年投入商业运营。马斯克在财报电话会上明确表示SpaceX将独家采用英伟达架构，Vera Rubin是「目前最好的AI计算机」。远期规划目标为构建最多100万颗卫星的轨道网络，通过激光链路实现星间高速数据传输，将AI算力从地面数据中心延伸至近地轨道。SpaceX地面算力容量已达1.4GW，计划年底突破2GW、2027年底接近10GW。</p>
+        <a href="https://www.eet-china.com/news/202608058204.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 中国电子工程网/SpaceX财报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>欧盟开放7个AI千兆工厂招标，拟动员300亿欧元公私投资强化AI主权算力基础设施</h2>
+        <p>8月5日欧盟委员会正式宣布开放最多7个AI千兆工厂（AI Gigafactories）项目的竞标，预计将动员超过300亿欧元的公私投资：其中欧盟及成员国公共资金最高100亿欧元，预计吸引至少200亿欧元私人投资。该项目由欧洲高性能计算联合企业（EuroHPC JU）牵头，将选择联盟建设运营商，提供基于英伟达H100性能基准的AI训练与推理算力，用于开发、训练、微调及部署万亿参数级大模型。目前已有18个欧盟成员国签署联合采购协议。此举是欧盟「AI大陆」战略的核心举措，旨在打破美国在AI算力基础设施上的垄断地位，建立欧洲自主可控的前沿模型训练能力。</p>
+        <a href="https://creativesunite.eu/article/eu-opens-bidding-for-up-to-seven-ai-gigafactories-in-potential-billion-investment-push" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Creatives Unite/欧盟委员会 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>越疆发布全球首款具身全栖人形机器人鹿萌（DOBOT LUMO），1.3米身高主打家庭陪伴与多场景切换</h2>
+        <p>8月5日港股协作机器人龙头越疆科技（02432.HK）在创业板IPO即将上会的关键窗口期，正式发布面向消费级市场的具身全栖人形机器人鹿萌（DOBOT LUMO）。该产品身高近1.3米，搭载越疆全栈自研的「空弈」具身大模型，首创「具身全栖」产品理念，从空间、角色、能力、周期四个维度打破传统机器人局限：可自由穿梭家庭、商场、校园等多元空间；根据人群切换生活搭子、运动玩伴、科普伙伴等不同身份；融合视觉语音运动多模态能力实现主动感知与行动；伴随用户成长持续迭代。核心技术突破包括多模态情绪感知、三维空间理解与主动行动、自主学习与长期进化三大层面。</p>
+        <a href="https://m.jiemian.com/article/14880568.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 界面新闻/越疆科技 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>马斯克预告Grok 4.6下周发布：1.5万亿参数重点改进监督微调与强化学习，Grok 4.7计划3-4周后推出</h2>
+        <p>在今日SpaceX财报电话会议上，马斯克正式预告xAI旗下Grok 4.6大模型将于下周发布，总参数量达1.5万亿，重点改进方向为监督微调（SFT）和强化学习（RL），以提升模型的指令遵循能力和复杂任务完成率。同时预告Grok 4.7版本将在未来3-4周后推出，参数量进一步提升至2.1万亿。此举表明xAI在连续发布Grok 4.5、Grok Voice Think Fast 2.0之后，正以两周一个版本的速度加速迭代追赶，通过密集的SFT+RL改进路线快速缩小与头部闭源模型在Agentic能力和推理质量上的差距。</p>
+        <a href="https://tech.ifeng.com/c/8vKmfy6AXaJ" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: IT之家/凤凰科技 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>高盛报告：2026年全球AI投资将突破1万亿美元，美国境内占5810亿美元，AI资本开支占GDP比重持续攀升</h2>
+        <p>8月5日高盛发布《全球经济分析》报告，修正市场对AI投资规模的普遍认知：被广泛引用的约7940亿美元超大规模云服务商资本开支数据存在系统性低估，纳入私募企业及非美国公司投资并剔除非AI相关支出后，2026年全球AI投资总额预计将达1.019万亿美元，其中美国境内约5810亿美元。高盛采用三种独立方法交叉验证（增强版超大规模云服务商资本开支法、上市公司毛利润预测修正法、官方国民账户与贸易数据法），结果高度一致指向超万亿美元规模。报告同时预计美国AI资本开支占GDP比重将从2026年的1.8%升至2028年的2.8%，与历史上通用技术周期2%-5%的峰值区间相符。</p>
+        <a href="http://m.toutiao.com/group/7669792406631580160/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 追风交易台/高盛研究 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>Jump Capital完成3.5亿美元Fund VIII募集，聚焦企业AI应用、基础设施与网络安全三大领域</h2>
+        <p>8月5日Jump Capital宣布完成第八期机构基金募集，总规模3.5亿美元，将专注投资于构建AI应用、企业基础设施和网络安全技术的创始人。基金将重点布局三个方向：AI驱动的企业软件重建、支撑生产级AI部署的新型基础设施（包括自主数据工程平台、语义上下文层、Agent可观测性与治理、分布式推理系统等）、以及适应日益自主系统的网络安全解决方案。Jump Capital表示企业AI采纳已从实验阶段进入生产部署阶段，但基础设施和安全的发展速度未能跟上AI采纳步伐，这正是最大的投资机会所在。</p>
+        <a href="https://crypto.news/jump-capital-bets-on-enterprise-ai-with-new-350m-fund-viii/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Crypto.news/Jump Capital -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>Palantir Q2营收19.4亿美元同比+93%，美国商业客户增长149%，Rule of 40达155%验证企业AI变现规模化</h2>
+        <p>Palantir第二季度财报数据于本周末发布，8月5日全行业深度解读。Q2营收达19.4亿美元同比增长93%，美国商业客户收入同比暴涨149%，单季签约220笔百万美元级订单，Rule of 40指标高达155%。Palantir的「AI主权」定位正从市场口号变为实际合同 closing 能力，企业级AI付费意愿和部署规模已从早期试点阶段进入规模化落地阶段。同期SpaceX AI业务板块收入26亿美元环比增长213%，两大事件共同印证AI已从「实验室Demo」全面进入「企业采购刚需」阶段。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-august-05-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AIToolsRecap/Palantir财报 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-05</span>
+        </div>
+        <h2>Grok Voice Think Fast 2.0正式启用：Agentic评分56.5%居行业第一，语音首响0.70秒定价$0.08/分钟</h2>
+        <p>8月5日SpaceXAI正式将grok-voice-latest默认版本升级为Think Fast 2.0，此前未锁定旧版本的团队自动迁移至新版本，定价$0.08/分钟（较v1.0上涨60%）。AA基准测试显示Think Fast 2.0在Agentic得分上以56.5%领先GPT-Realtime-2.1的45.7%，STS总质量指数82.9%仅次于Qwen Audio 3.0 TTS Plus。Starlink生产环境A/B测试证实新版本在销售转化率和客服问题解决率上均有提升。用户可通过锁定grok-voice-think-fast-1.0回退版本。这是xAI在语音Agent赛道上对OpenAI GPT-Realtime系列的首次正面超越验证。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-august-05-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AIToolsRecap/SpaceXAI公告 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业核心主线清晰：<strong>算力基础设施的空间延伸与主权化</strong>。SpaceX联手英伟达将AI算力从地面数据中心搬入近地轨道，Starmind AI1卫星计划以百万颗规模构建分布式太空AI超级计算机，标志着算力竞赛从「地面机房争夺战」扩展至「近地轨道疆土开拓」——当马斯克说「我们只选英伟达」时，不仅是芯片采购决策，更是对「天基算力」这一全新基础设施品类的战略锚定。而欧盟同步启动7个AI千兆工厂300亿欧元招标，则是主权算力路线的另一种表达：SpaceX代表商业公司的太空野心，欧盟代表国家意志的地面主权，两条路线殊途同归，目标都是突破算力瓶颈、掌握AI时代的基础设施控制权。</p>
+        <p>第二个显著趋势是<strong>企业级AI变现的实质性加速</strong>。Palantir Q2营收93%增长、SpaceX AI板块247%增长、Jump Capital 3.5亿美元基金专注企业AI，三重信号从不同维度印证：AI已从「Demo展示期」进入「大规模采购期」，企业不再纠结AI能不能用，而是关心怎么部署、谁来提供安全保障。高盛万亿美元AI投资报告进一步佐证资本开支周期的体量与持续性，AI正从科技公司的「成本项」变为全社会的「生产力基础设施」。</p>
+        <p>消费级端侧同样值得关注：越疆发布具身全栖机器人鹿萌、马斯克预告两周一个大模型版本的密集迭代节奏、Grok Voice 2.0在Agentic语音赛道首超GPT-Realtime——这些产品层面的动作，正在将AI能力从云端API、从工厂车间，逐步推向家庭客厅和个人口袋。当算力上天、模型入地、机器人进屋，AI的基础设施、软件平台和消费终端三个维度正在同步完成代际跃迁，一个全新的AI产业格局正在形成。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
