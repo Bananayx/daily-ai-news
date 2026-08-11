@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.11 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.11</h1>
+      <p>星期一</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>英伟达联合六大华尔街巨头搭建5000亿美元AI算力融资平台，算力正式成为可投资资产</h2>
+        <p>英伟达正式宣布与阿波罗、贝莱德、黑石、博枫、高盛及KKR六大全球顶级资管机构签署谅解备忘录，合力打造独立算力融资平台，目标撬动超5000亿美元第三方资本投入全球AI数据中心与GPU算力集群建设。黄仁勋将此举定义为"AI工厂基础设施跨越"——GPU集群不再是折旧硬件，而是具备稳定现金流的可投资基础设施资产。平台设立专项资本池为云服务商、AI实验室提供融资，英伟达可提供最高1250亿美元（25%）残值支持。此举引发"循环融资"质疑，导致英伟达股价收跌2.86%，CDS信用风险溢价升至两周新高。大摩研报指出该结构性安排已从根本上化解循环融资担忧，并测算若英伟达以35%比例分享超额收益，FY29年每瓦算力收入分成可超100亿美元。</p>
+        <a href="https://finance.sina.com.cn/wm/2026-08-11/doc-inimxewr7592397.shtml" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 新浪财经 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>Meta开源Muse Glimmer 30B模型：Apache 2.0授权，单张消费级GPU即可运行本地智能体</h2>
+        <p>Meta超级智能实验室正式发布Muse Glimmer 30B开放权重模型（Apache 2.0许可），专为本地智能体工作流优化。模型通过4-bit量化压缩至约17GB（另有20GB标准版），可在单张24GB显存的Mac或PC上运行。Muse Glimmer基于Muse Spark蒸馏训练，支持128K上下文窗口，强化长流程执行、精确工具调用、多模态理解（文本+图像）和失败诊断重试能力。官方测试显示在RTX 5090上DFlash推测解码实现3.1倍加速。同步宣布将在数周内开放Muse Spark 1.2全部权重，扎克伯格发布14页万字长文《The Future is for Everyone》抨击闭源巨头，呼吁降低美国开放权重AI政策壁垒，设立10亿美元基金缓解数据中心建设社区阻力。</p>
+        <a href="https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Meta Research Blog -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>OpenAI推出GPT-5.6-Cyber：95%高级网络安全请求完成率，Daybreak分级访问正式上线</h2>
+        <p>OpenAI正式推出GPT-5.6-Cyber网络安全专用模型并扩展Daybreak访问为两个层级：Daybreak Blue为防御方提供无系统级护栏的GPT-5.6 Sol；Daybreak Red提供专为网络安全训练的GPT-5.6-Cyber。新模型在内部"高级网络安全完成率"测试中达到95.0%，而GPT-5.6 Sol仅有1.5%、GPT-5.5-Cyber仅57.3%。发布后GPT-5.6-Cyber已独立发现Chrome V8引擎两个可链结的零日漏洞（CVE-2026-15903），以及移动操作系统、数据库、OS内核中的数百个高危漏洞。SpecterOps、SentinelOne、Palo Alto Networks成为首批公开客户。OpenAI强调该模型未达Astra触发的"关键"网络安全门槛，仅达"高"级别，通过Daybreak Red的严格审核流程仅向授权安全团队开放。</p>
+        <a href="https://openai.com/index/expanding-daybreak-as-the-cyber-defense-window-narrows/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: OpenAI 官方公告 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>谷歌发布WeatherNext Cyclones：AI天气预报模型在《自然》发表，有效预报提前量增加一天以上</h2>
+        <p>谷歌DeepMind开放WeatherNext 2与WeatherNext Cyclones两个AI天气预报模型，相关论文发表于《自然》杂志。论文显示，新模型在2023-2025年气旋评估中，对路径、强度和风圈的预测平均增加一天以上的有效提前量，集合预报可扩展至1000种情景。WeatherNext Cyclones专为热带气旋路径预测优化，与传统数值天气预报(NWP)模型形成互补。谷歌将模型权重与推理API免费开放给研究者与气象机构，推动AI在地球科学领域的实际应用。</p>
+        <a href="https://deepmind.google/research/publications/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Google DeepMind -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>寻明生科（Aureka）获1亿美元B轮融资：AI4S赛道第二波风口，生物基座模型AuraIDE开源在即</h2>
+        <p>AI制药公司寻明生科（Aureka）完成总额1亿美元B系列融资，首轮由Granite Asia（原纪源资本GGV亚洲业务）独家投资，后续轮由知名产业投资人领投，弘晖基金跟投，启明创投、经纬创投等老股东追加。距离其3500万美元A+轮仅过去3个多月。公司由哈佛医学院博士后、加州大学尔湾分校终身正教授赵伟安创办，搭建了生成式AI平台与高通量数字生物学闭环，已产生千万美元级收入和候选药物管线。本轮资金将用于开发生物基座模型AuraIDE（千卡规模算力投入），7月已开源OpenDDE生物结构建模能力。赵伟安指出AI制药已从"降本增效"转向"科学发现推高智能上限"，AlphaFold不是生物世界的天花板。</p>
+        <a href="https://36kr.com/p/3933494167108738" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 36氪 暗涌Waves -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>Anthropic携手Riot Platforms签下91亿美元20年期算力合作，矿企转型AI数据中心成新赛道</h2>
+        <p>Anthropic与由比特币矿业转型云计算服务的Riot Platforms签署总额91亿美元、为期20年的深度合作协议。Riot将为Anthropic提供大规模AI算力支持，标志着传统加密货币矿企加速入局AI数据中心赛道。这笔交易是Anthropic继与Volta签署100亿美元算力大单、与黑石组建15亿美元合资企业Ode之后，算力布局的又一重要补充。行业分析师认为，矿企凭借已有的电力基础设施和数据中心运营经验，正成为AI算力建设的重要参与者。</p>
+        <a href="https://news.aibase.cn/news/30234" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AIbase -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>腾讯开源BrowserSkill：AI智能体专属浏览器自动化工具，支持完整复用等特性</h2>
+        <p>腾讯正式开源AI智能体浏览器工具BrowserSkill，专为智能体高效处理网页任务设计，区别于传统大模型插件。核心亮点包括支持完整复用等特性，显著提升自动化任务的可靠性和效率。BrowserSkill可与AI Agent框架无缝集成，使智能体能够独立完成网页交互、数据采集、表单填写等复杂操作。这是继腾讯云Agent Memory 2.0.0（Team Memory团队记忆）上线后，腾讯在Agent基础设施领域的又一重要布局。</p>
+        <a href="https://news.aibase.cn/news/30233" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AIbase -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-11</span>
+        </div>
+        <h2>豆包AI本地生活开启12%抽佣：国内主流AI对话工具正式打通交易闭环，商业化进入实质阶段</h2>
+        <p>自8月10日起，字节跳动旗下豆包酒店推荐订单执行全新独立结算费率：订单成交扣除11.4%软件服务费+0.6%支付手续费，综合费率合计12%。这标志着国内主流AI对话工具正式打通本地生活交易闭环，AI流量从免费红利转入商业化周期。官方回应称不设置付费竞价排名，商家无法通过投放广告提升推荐权重，仅在产生实际订单后收取渠道服务费。业内解读AI问答属于高精准人找货流量，用户转化效率高于短视频泛流量。后续机票、景区、民宿等品类有望同步落地抽佣机制，AI商业化赛道迎来实质性验证。</p>
+        <a href="http://m.toutiao.com/group/7672685023568445954/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 今日头条 A股早报 -></a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业的最大看点是英伟达将AI算力"证券化"的激进尝试——联合六大华尔街巨头搭建5000亿美元融资平台，把GPU集群从折旧硬件重新定义为可投资的基础设施资产。这是从"卖芯片"到"卖算力金融"的深层跃迁，虽然"循环融资"质疑导致股价下跌2.86%，但黄仁勋成功把算力纳入基础设施投资逻辑，贝莱德将其比作70年代抵押贷款支持证券的诞生——若模式跑通，AI基建的资本约束将被彻底解除。</p>
+        <p>Meta与OpenAI的同日发布形成鲜明对照：Meta开源Muse Glimmer 30B（Apache 2.0）主打本地部署，扎克伯格万字长文抨击闭源巨头"权力集中"，宣布数周内开放Muse Spark 1.2全部权重，并通过10亿美元数据中心社区基金对冲选址阻力；OpenAI则把GPT-5.6-Cyber严格限定在Daybreak Red审核制内，95%的高级网络安全完成率远超通用模型，但访问门槛极高。一个向"开放+去中心化"，一个向"受控+分级访问"，两种治理哲学的分野已呈清晰的行业分水岭。</p>
+        <p>商业化端同样传来标志性信号：豆包AI对本地生活订单征收12%综合服务费，标志国内AI对话工具正式打通交易闭环；寻明生科1亿美元B轮融资显示AI4S赛道第二波风口来临，生物基座模型正从辅助工具变为研发核心决策者。叠加谷歌WeatherNext在《自然》发表、腾讯开源BrowserSkill、Anthropic签下91亿美元矿企算力大单，AI产业的三条主线——基础设施金融化、开源闭源路线之争、从技术验证走向商业变现——正在同步收敛，一个格局清晰的AI产业生态正在加速成型。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
