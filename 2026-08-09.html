@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.09 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.09</h1>
+      <p>星期日</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>NVIDIA开源NOOA Agent框架：SWE-bench 82.2%，Agent即一个Python类，一行pip即可安装</h2>
+        <p>NVIDIA Labs正式开源NOOA框架（Apache 2.0协议），其核心创新在于结构设计：将Agent定义为一个Python类，而非传统的提示词模板和回调图集合。方法体中的"..."由LLM在运行时完成，普通方法体则执行确定性Python代码——状态、提示、动作、契约全部统一在一个类中，可像普通软件一样测试、追踪和版本控制。基准测试成绩：SWE-bench Verified 82.2%、CyberGym L1 86.8%、ARC-AGI-3 85.1%，通过LiteLLM实现模型无关性，支持Python 3.12-3.13。NVIDIA特别警告：AST检查不等于真正的容器隔离，建议在容器、虚拟机或NVIDIA OpenShell中运行。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-august-09-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AIToolsRecap -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>Anthropic推出Ode With Anthropic：15亿美元合资企业，100人团队部署企业级合规Claude</h2>
+        <p>Anthropic正式推出Ode With Anthropic，这是与Blackstone和Hellman & Friedman联合组建的15亿美元合资企业，目前已有100名工程师。该项目获高盛、General Atlantic、Apollo、GIC、红杉资本等机构支持，目标客户为中型银行、医疗系统和制造商，提供数据主权和合规就绪的Claude部署方案。此举与本周早些时候宣布前加州最高法院大法官Tino Cuéllar加入担任CGAO（首席全球事务官）的任命相呼应，标志着Anthropic正在协调推进企业级合规部署作为核心增长市场，其FLI C+安全评级（前沿实验室最高）成为关键商业差异化优势。</p>
+        <a href="https://aitoolsrecap.com/Blog/ai-news-august-09-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AIToolsRecap -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>Cloudflare发布Kitesurf：专为AI Agent打造的浏览器，算力消耗仅Chromium三分之一</h2>
+        <p>Cloudflare推出Kitesurf云托管浏览器引擎，用Rust编写并编译为WebAssembly，完全在Cloudflare Workers内运行。Kitesurf专为AI Agent设计而非人类使用——针对截图和HTML提取等常见自动化任务进行了深度优化：截图任务CPU消耗减少3.1倍、内存减少4.7倍，HTML提取任务CPU减少3.8倍、内存减少7倍（实际耗时仍慢约1.7倍，但CPU和内存才是规模化部署的核心成本）。项目从首次提交到公开Beta仅用12周，23.5万+ Web Platform Tests全部通过，兼容现有Puppeteer和Playwright客户端。Cloudflare数据显示AI Agent流量过去一年暴增近8000%，每个Agent都在为Chromium的人类特性支付高昂费用。</p>
+        <a href="https://dev.to/lukeocodes/this-last-week-in-ai-aug-8-2026-46g6" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: dev.to / LukeOCodes -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>OpenAI收购NextSlide演示文稿初创公司，加速布局办公生产力场景</h2>
+        <p>OpenAI宣布收购演示文稿初创公司NextSlide，其团队已加入ChatGPT部门。此次收购标志着OpenAI正加速布局办公生产力场景，直接对标微软PowerPoint和谷歌Slides。NextSlide专注于利用AI自动生成和编辑演示文稿，其能力有望整合进ChatGPT Work或独立产品中。在AI编程、企业代理、硬件终端后，办公生产力正成为OpenAI下一个重点攻坚的垂直领域。</p>
+        <a href="http://m.toutiao.com/group/7671977344587924022/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 今日头条 AI日报 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>Anthropic签下100亿美元云算力大单，同步组建自研AI芯片团队</h2>
+        <p>Anthropic与AI云初创公司Volta签署高达100亿美元的算力合作协议，同时正在组建芯片设计团队，计划自研AI芯片以提升模型运行效率。这是Anthropic在算力布局上的又一重大动作：上周刚完成亚马逊500亿美元全额投资，同步推进GPU采购和自研芯片两条路线，与OpenAI的军备竞赛持续升级。分析师认为，随着Claude模型规模持续扩大和企业级部署加速，算力成本控制已成为Anthropic能否保持竞争力的核心变量。</p>
+        <a href="http://m.toutiao.com/group/7671977344587924022/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 今日头条 AI日报 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>DeepSeek预告API涨价：AI低价红利时代正式落幕，行业进入成本回归周期</h2>
+        <p>DeepSeek正式发布API涨价预告，标志着AI行业的低价红利期即将结束。低价曾是DeepSeek击穿市场的利器——以远低于国际巨头的价格提供同等甚至更优的模型性能，迅速积累了大量开发者用户。但随着Agent技术拉动算力消耗激增（据AWS数据约65%的EC2实例长期闲置但AI推理需求仍在快速增长），以及国产GPU采购成本并不低，"烧钱换市场"的模式已不可持续。分析认为，低价是手段而非目的，下一步DeepSeek需要证明AI业务能够真正赚钱，行业整体将从"智价比竞赛"转向"成本-价值再平衡"。</p>
+        <a href="http://m.toutiao.com/group/7671977344587924022/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 今日头条 AI日报 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>五巨头联合发布Agent Plugins 1.0标准：Vercel、Amazon、Microsoft、OpenAI、Cursor统一AI Agent扩展格式</h2>
+        <p>Vercel、Amazon、Microsoft、OpenAI和Cursor五家公司联合发布Agent Plugins 1.0.0开放打包标准，将Agent Skills（可复用指令）和MCP服务器（工具与数据连接）打包为统一的目录格式，根目录放置plugin.json清单文件。任何兼容客户端均可读取同一包格式。首发支持ChatGPT、Codex、Cursor、GitHub Copilot、Kiro和VS Code，Google随后加入核心维护者行列。规范采用CC-BY-4.0和Apache 2.0许可，治理结构确保单一厂商无法占据多数维护席位。值得注意的是Anthropic未出现在指导委员会名单中，Claude Code使用不同的插件布局，形成标准与生态的微妙分裂。</p>
+        <a href="https://dev.to/lukeocodes/this-last-week-in-ai-aug-8-2026-46g6" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: dev.to / LukeOCodes -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-09</span>
+        </div>
+        <h2>国家发改委：加快《人工智能法》立法进程，国产大模型全球下载量破百亿次</h2>
+        <p>国家发改委明确表示要加快《人工智能法》立法进程，让人工智能"既跑得快又跑得稳"。据统计，国产大模型全球总下载量已突破100亿次，全球开源模型下载量占比41%，居世界第一。立法进程的加快将为AI行业健康发展提供更完善的法律保障。同期，苹果公司发布中文指南，确认符合条件的中国大陆Mac用户可将阿里巴巴千问（Qwen）大模型接入Siri语音助手和"写作工具"，国内AI大模型首次进入苹果生态体系。</p>
+        <a href="http://m.toutiao.com/group/7671814461333750282/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 今日头条 AI早报 -></a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现「Agent基础设施开源化+企业级合规部署加速+商业化理性回归」三线并进格局。NVIDIA开源NOOA将Agent开发门槛降至pip install一行代码，Cloudflare的Kitesurf专为AI Agent量身打造浏览器基础设施，叠加五巨头联合发布Agent Plugins 1.0.0标准，Agent生态正从"能力竞赛"转向"基础设施完善"——当开发工具链和运行时环境逐步标准化，AI Agent的大规模普及正在扫清最后的工程障碍。</p>
+        <p>Anthropic通过15亿美元合资企业+100亿美元算力大单+自研芯片三线并进，押注合规化企业部署作为下一波增长引擎。叠加前加州最高法院大法官加入担任CGAO、FLI C+安全评级作为商业差异化标志，Anthropic正在构建一套"安全资质+算力保障+渠道分销"的完整企业级AI方案，与OpenAI的竞争从技术领先转向综合实力的全面较量。</p>
+        <p>DeepSeek宣布API涨价则标志着AI行业的低价红利期正式结束，当Agent真正开始大规模消耗算力时，"烧钱换市场"的模式已不可持续。国产大模型下载量突破百亿次、占全球41%，叠加苹果接入阿里千问、国内立法加速，一个清晰的趋势正在浮现：AI产业的竞争焦点已从"模型能力谁最强"转向"谁能以最低成本、最合规的方式把AI能力送到最多用户手中"——这是行业从技术驱动走向商业驱动的标志性转变。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
