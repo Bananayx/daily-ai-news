@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.14 - 每日AI晚报</title>
+  <style id="theme-vars">
+    :root {
+      --color-bg-background: #c5c9c9;
+      --color-bg-card: #d8dada;
+      --color-bg-popover: #d8dada;
+      --color-bg-muted: #d8dada;
+      --color-text-foreground: #111111;
+      --color-text-card-foreground: #111111;
+      --color-text-popover-foreground: #111111;
+      --color-text-primary-foreground: #ffffff;
+      --color-text-secondary-foreground: #ffffff;
+      --color-text-muted-foreground: #888888;
+      --color-text-accent-foreground: #ffffff;
+      --color-text-destructive-foreground: #ffffff;
+      --color-accent-primary: #111111;
+      --color-accent-secondary: #111111;
+      --color-accent-accent: #0040ff;
+      --color-accent-input: #ffffff;
+      --color-accent-ring: #000000;
+      --color-status-destructive: #d73333;
+      --color-status-success: #1a8a4a;
+      --color-status-warning: #b8860b;
+      --color-status-info: #0040ff;
+      --color-border-border: #ffffff;
+      --color-chart-1: #0140ff;
+      --color-chart-2: #386aff;
+      --color-chart-3: #6b90ff;
+      --color-chart-4: #94afff;
+      --color-chart-5: #bdcdff;
+      --shadow-xs: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+      --shadow-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow-md: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow-lg: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --shadow-xl: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+      --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-serif: 'Geist', ui-sans-serif, sans-serif, system-ui;
+      --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-lg: 1.125rem;
+      --text-xl: 1.25rem;
+      --text-2xl: 1.5rem;
+      --text-3xl: 1.875rem;
+      --text-4xl: 2.25rem;
+      --text-5xl: 3rem;
+      --text-6xl: 3.75rem;
+      --text-7xl: 4.5rem;
+      --leading-none: 1;
+      --leading-tight: 1.2;
+      --leading-snug: 1.35;
+      --leading-normal: 1.5;
+      --leading-relaxed: 1.625;
+      --font-light: 300;
+      --font-normal: 400;
+      --font-medium: 500;
+      --font-semibold: 600;
+      --font-bold: 700;
+      --radius-sm: 0px;
+      --radius-md: 0px;
+      --radius-lg: 0px;
+      --container-max: 1200px;
+      --spacing-base: 4px;
+    }
+    .dark {
+      --color-bg-background: #0a0a0a;
+      --color-bg-card: #1a1a1a;
+      --color-bg-popover: #1a1a1a;
+      --color-bg-muted: #333333;
+      --color-text-foreground: #ffffff;
+      --color-text-card-foreground: #ffffff;
+      --color-text-popover-foreground: #ffffff;
+      --color-text-primary-foreground: #000000;
+      --color-text-secondary-foreground: #ffffff;
+      --color-text-muted-foreground: #aaaaaa;
+      --color-text-accent-foreground: #ffffff;
+      --color-text-destructive-foreground: #ffffff;
+      --color-accent-primary: #ffffff;
+      --color-accent-secondary: #333333;
+      --color-accent-accent: #0040ff;
+      --color-accent-input: #1a1a1a;
+      --color-accent-ring: #333333;
+      --color-status-destructive: #ef4444;
+      --color-status-success: #34d399;
+      --color-status-warning: #fbbf24;
+      --color-status-info: #60a5fa;
+      --color-border-border: #333333;
+      --color-chart-1: #60a5fa;
+      --color-chart-2: #818cf8;
+      --color-chart-3: #34d399;
+      --color-chart-4: #a78bfa;
+      --color-chart-5: #c4b5fd;
+      --shadow-xs: 2px 2px 0 rgba(255,255,255,0.08);
+      --shadow-sm: 2px 2px 0 rgba(255,255,255,0.12);
+      --shadow: 2px 2px 0 rgba(255,255,255,0.12);
+      --shadow-md: 2px 2px 0 rgba(255,255,255,0.15);
+      --shadow-lg: 2px 2px 0 rgba(255,255,255,0.18);
+      --shadow-xl: 2px 2px 0 rgba(255,255,255,0.2);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --color-chart-1: var(--color-chart-1);
+      --color-chart-2: var(--color-chart-2);
+      --color-chart-3: var(--color-chart-3);
+      --color-chart-4: var(--color-chart-4);
+      --color-chart-5: var(--color-chart-5);
+      --color-sidebar-foreground: var(--color-sidebar-foreground);
+      --color-sidebar-primary: var(--color-sidebar-primary);
+      --color-sidebar-primary-foreground: var(--color-sidebar-primary-foreground);
+      --color-sidebar-accent: var(--color-sidebar-accent);
+      --color-sidebar-accent-foreground: var(--color-sidebar-accent-foreground);
+    }
+    @layer base {
+      body { background: var(--color-background); color: var(--color-text-primary); }
+      td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+      th { @apply whitespace-nowrap; }
+    }
+  </style>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    [data-icon] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      background-color: currentColor;
+    }
+  </style>
+  <style>
+    body {
+      font-family: 'Geist Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+      background: var(--color-bg-background);
+      color: var(--color-text-foreground);
+      margin: 0;
+      padding: 0;
+    }
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--color-text-foreground); border-bottom: 2px solid var(--color-border-border); height: 58px;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px; height: 100%; display: flex; align-items: center; justify-content: space-between;">
+      <a href="index.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-border-border);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2C8 2 5 5 5 9c0 2 1 4 3 5.5V18h2v-2h4v2h2v-3.5c2-1.5 3-3.5 3-5.5 0-4-3-7-7-7ZM9 10a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm6 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="var(--color-border-border)"/>
+          <path d="M8 20h8" stroke="var(--color-border-border)" stroke-width="2" stroke-linecap="square"/>
+          <path d="M9 22h6" stroke="var(--color-border-border)" stroke-width="2" stroke-linecap="square"/>
+        </svg>
+        <span style="font-size: 1rem; font-weight: 700; letter-spacing: -0.02em;">每日AI晚报</span>
+      </a>
+      <a href="index.html" data-dom-id="nav-home" data-nav-key="home" style="color: var(--color-border-border); text-decoration: none; font-size: 0.875rem; border: 2px solid var(--color-border-border); padding: 4px 12px;">← 回到首页</a>
+    </div>
+  </nav>
+
+  <main style="padding: 64px 16px 48px; max-width: 1200px; margin: 0 auto;">
+    <header style="margin-bottom: 32px; padding-top: 16px;">
+      <h1 style="font-size: 3rem; font-weight: 700; margin: 0 0 8px; color: var(--color-text-foreground); letter-spacing: -0.03em; line-height: 1.1;">2026.08.14</h1>
+      <p style="font-size: 1rem; font-weight: 400; color: var(--color-text-muted-foreground); margin: 0;">星期五 · 今日AI新闻速递</p>
+    </header>
+
+    <section style="display: flex; flex-direction: column; gap: 16px;">
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-success); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-success);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-success)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">苹果在华训练大模型，由阿里巴巴提供支持</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://m.weibo.cn/detail/5331798269366348" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">产品发布</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">据路透社独家报道，苹果公司正在专门针对中国市场训练一款大型语言模型，并由阿里巴巴参与开发与提供训练支持。这意味着苹果正在调整其在中国市场的AI策略，从此前主要依赖本土第三方模型提供智能能力，转向"自研模型加本土合作伙伴"的双轨方案。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-success); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-success);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-success)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">谷歌Gemini 3.7 Flash发布，价格降一半</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://aiproducthub.cn/newsflash/" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">产品发布</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">谷歌发布Gemini 3.7 Flash模型，重点强化编码和Agent能力，价格相比上一代降低一半，标志着Google在AI竞赛中重新发力中端市场。与此同时，Google MaxText新增单主机TPU上的SFT和RL支持，大幅降低TPU微调门槛。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-warning); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-warning);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-warning)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">Databricks融资50亿美元，估值冲1900亿美元</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://aiproducthub.cn/newsflash/" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">融资事件</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">Databricks完成50亿美元新一轮融资，估值达到1900亿美元。与此同时，Anthropic正在洽谈收购AI初创公司Decart，交易估值可能达到约60亿美元，AI行业并购大战可能开始。未来几年可能出现大量AI领域并购，巨头疯狂补齐技术版图。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-chart-3); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-chart-3);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-chart-3)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <polyline points="6 3 6 15 6 21"/>
+              <polyline points="18 21 18 9 18 3"/>
+              <polyline points="6 9 12 3 18 9"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">阿里、Meta同步开源旗舰模型，中国大模型掀翻硅谷定价逻辑</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="http://m.toutiao.com/group/7673649732056613385/" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">开源项目</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">阿里Qwen3.8-2.4T-A95B模型权重正式开放，系阿里首次将Max级别旗舰模型开源；Meta同步发布Muse Glimmer开源模型，并承诺开放Muse Spark 1.2权重。据Hugging Face报告，中国开源模型下载占比达41%，首次超过美国，累计下载量突破100亿次。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-accent-accent); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-accent-accent);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-accent)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <path d="M9 3h6v2l2 1v4l-2 1v2h-6v-2l-2-1V6l2-1V3z"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">Anthropic MCP协议存设计缺陷，20万台AI服务器面临攻击风险</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://www.woshipm.com/ai/6379704.html" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">研究突破</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">安全研究人员披露Anthropic的MCP（Model Context Protocol）协议存在设计缺陷，可能导致远程代码执行漏洞，影响全球超过20万台AI服务器。MCP协议是Anthropic主推的模型上下文标准，被大量AI应用采用做数据集成。漏洞细节已提交给Anthropic，官方正在修复中。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-warning); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-warning);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-warning)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">英伟达与六大金融机构合作，撬动5000亿美元AI基础设施融资</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://www.doit.com.cn/newsflash/" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">行业动态</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">英伟达宣布与阿波罗、贝莱德、黑石、Brookfield、高盛、KKR六大金融机构达成合作，将共同搭建AI基础设施融资平台，目标撬动超过5000亿美元第三方资本，用于支持AI数据中心建设及GPU采购。黄仁勋表示AI算力正在成为一种新的生产性资产。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-success); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-success);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-success)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">Meta推出Muse Code，AI编程从"代码助手"走向"数字程序员"</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="http://m.toutiao.com/group/7673638049472987711/" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">产品发布</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">Meta推出Muse Code，直接瞄准Claude Code和OpenAI Codex等AI编程工具。这意味着AI编程正在从"代码助手"变成"数字程序员"。未来企业可能不再只是给每个员工配一个聊天机器人，而是给员工配一组能够执行具体任务的AI Agent。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-warning); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-warning);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-warning)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">AI医疗龙头Tempus AI首次季度盈利，但实际靠"纸面富贵"</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://www.jiemian.com/article/14922068.html" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">行业动态</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">美股AI医疗龙头Tempus AI发布2026年Q2财报，实现营收3.8亿美元（同比+22%），净利润564万美元，宣告首次季度盈利。但分析显示，其经营利润仍在亏损，盈利主要源于所持股票的"未实现收益"，占比高达96%，商业模式可持续性存疑。</p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--color-bg-card); border: 2px solid var(--color-border-border); border-left: 4px solid var(--color-status-warning); box-shadow: 2px 2px 0 rgba(0,0,0,1); padding: 16px 20px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-status-warning);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-status-warning)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="margin: 0 0 4px; font-size: 1.125rem; font-weight: 700; color: var(--color-text-foreground); line-height: 1.35;">第二届人形机器人运动会将于8月22日在北京举办</h3>
+            <span style="display: inline-block; font-size: 0.75rem; color: var(--color-text-muted-foreground); margin-bottom: 6px;"><a href="https://www.doit.com.cn/newsflash/" target="_blank" style="color: var(--color-accent-accent); text-decoration: none;">行业动态</a></span>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">第二届世界人形机器人运动会将于8月22日至26日在北京国家速滑馆举行，来自16个国家的666支队伍、2056台机器人将参赛，队伍数量较首届增长138%。赛事首次引入双机器人、四机器人协同作业，场景赛覆盖家庭、酒店、工业、应急救援等真实场景。</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section style="margin-top: 48px; padding: 24px; background: var(--color-bg-card); border: 2px solid var(--color-border-border); box-shadow: 2px 2px 0 rgba(0,0,0,1);">
+      <h3 style="margin: 0 0 12px; font-size: 1rem; font-weight: 700; color: var(--color-text-foreground);">今日趋势点评</h3>
+      <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-foreground); line-height: 1.6;">今日AI行业的核心主题是开源与闭源的正面交锋：阿里、Meta同步开源旗舰模型，中国开源模型下载量首次超越美国，正在重塑全球定价逻辑。同时，苹果在华启动自主大模型训练、英伟达撬动5000亿美元AI融资、Databricks估值冲1900亿美元，全球AI基础设施军备竞赛持续升级。值得警惕的是，Anthropic MCP协议暴露安全缺陷，AI安全问题正从理论讨论走向现实挑战。</p>
+    </section>
+  </main>
+
+  <footer style="border-top: 2px solid var(--color-border-border); padding: 32px 16px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <p style="margin: 0; font-size: 0.75rem; color: var(--color-text-muted-foreground);">内容由AI生成，请谨慎甄别。</p>
+    </div>
+  </footer>
+
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; background: var(--color-text-foreground); border: 2px solid var(--color-border-border); box-shadow: 2px 2px 0 rgba(0,0,0,1); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-border-border)" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+      <path d="M12 19V5M5 12l7-7 7 7"></path>
+    </svg>
+  </button>
+
+  <script>
+    (function(){
+      var b = document.getElementById('back-to-top');
+      window.addEventListener('scroll', function(){
+        if(window.scrollY > 300){
+          b.style.opacity = '1';
+          b.style.pointerEvents = 'auto';
+        } else {
+          b.style.opacity = '0';
+          b.style.pointerEvents = 'none';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
