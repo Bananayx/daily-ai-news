@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.14 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.14</h1>
+      <p>星期五</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>Google发布Gemini 3.7 Flash：代码能力追平旗舰，价格腰斩，面向Coding与Agent工作流</h2>
+        <p>谷歌在3.6 Flash发布仅3周后紧急推出Gemini 3.7 Flash，由新任DeepMind负责人Koray Kavukcuoglu操刀。新模型在FrontierCode 1.1 Main上从34.4%跃升至43.6%，DeepSWE v1.1从49.0%暴涨至65.3%，WebDev Code Arena Elo达1588，全面超越Claude Sonnet 5和GPT-5.6 Terra。AutomationBench企业自动化测试从17.0%提升至30.4%，超过Claude Sonnet 5(10.7%)和GPT-5.6 Terra(23.6%)。首发价为3.6 Flash的一半（输入$0.75/百万Token，输出$3.75/百万Token），支持1M上下文窗口，Gemini Spark从当日起切换至3.7 Flash驱动。</p>
+        <a href="https://deepmind.google/models/gemini/flash/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Google DeepMind -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>OpenAI预览Ultrafast模式：Cerebras晶圆级芯片加持，GPT-5.6 Sol达750 tokens/秒</h2>
+        <p>OpenAI联合Cerebras预览Ultrafast服务等级，基于Cerebras Wafer-Scale Engine（单芯片44GB SRAM），将GPT-5.6 Sol加速至Standard模式的14倍，最高输出750 tokens/秒。Cerebras称Ultrafast在Humanity's Last Exam 2500题测试中用时11小时11分钟完成，而Claude Fable 5需要78小时27分钟，速度提升近7倍。该服务首先通过API向有限企业客户开放，定价尚未公布，主要面向实时客服、金融分析、紧急响应等对延迟敏感的场景。这是OpenAI 10亿美元Cerebras合作的首个重大落地成果。</p>
+        <a href="https://openai.com/index/previewing-ultrafast/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: OpenAI 官方公告 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>DeepSeek开源Harness Agent框架（MIT协议）：一切皆插件，同时宣布8月17日起峰谷定价</h2>
+        <p>DeepSeek正式发布并开源Agent开发框架DeepSeek Harness开发者预览版（v0.1），采用MIT协议，基于Cordis插件系统构建。核心设计理念为"一切皆插件"：模型、工具、技能、会话、沙箱、存储、调度及UI等所有Agent能力均可通过插件自由组合替换，开发者无需修改源码。支持标准、代码、极简、创造四种运行模式，提供完整的会话日志、轨迹回放、分叉恢复等调试能力。GitHub星数半日突破3万。同步宣布8月17日起实施峰谷定价机制，高峰时段（9:00-12:00, 14:00-18:00）V4-Pro输出价格最高上调至27元/百万Tokens，空闲时段降至50%。</p>
+        <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: DeepSeek Harness 官方页 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>Anthropic谈判60亿美元收购以色列AI初创Decart AI，强化低延迟推理基础设施</h2>
+        <p>据Bloomberg报道，Anthropic正与以色列AI初创公司Decart AI就约60亿美元的收购进行深入谈判。Decart由Dean Leitersdorf、Moshe Shalev和Orian Leitersdorf于2023年创立，专注于实时低延迟生成式视频和交互式世界模型，核心技术为Decart Optimization Stack（DOS）。公司曾于5月完成3亿美元B轮融资（Radical Ventures领投），累计融资超4.5亿美元，估值约40亿美元，投资方包括NVIDIA、Adobe Ventures、Sequoia Capital等。若交易达成，这将是Anthropic史上最大收购，将显著强化其推理性能与基础设施能力，并加速其10月IPO进程（传闻估值或达2万亿美元）。</p>
+        <a href="https://www.bloomberg.com/news/articles/2026-08-13/anthropic-said-in-talks-to-buy-ai-startup-decart-for-6-billion" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Bloomberg -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>腾讯混元2.0发布：406B参数MoE架构，IMO数学题超越GPT-4o，2027年计划开源</h2>
+        <p>腾讯正式发布混元2.0大模型，采用406B总参数/32B激活参数的MoE（混合专家）架构，在国际数学奥林匹克（IMO）竞赛级别数学题上超越GPT-4o（83.1% vs 78.9%）。模型分为Think（增强推理）和Instruct（指令遵循）两个版本，已集成至元宝、ima等产品和腾讯云API。云端API定价约为GPT-4o的一半。腾讯宣布计划2027年开源混元2.0核心组件，包括模型权重、训练数据和长上下文处理工具链，旨在构建中国AI生态系统。</p>
+        <a href="https://ai-damn.com/tencent-s-hunyuan-2-0-ai-model-breaks-records-with-406b-parameters-1765167198774" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AI D A M N -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>原力无限完成近10亿元融资：具身大脑AtomBrain+因果世界模型，多形态机器人规模化交付</h2>
+        <p>原力无限（INFIFORCE）宣布完成A轮及A+轮融资，总额近10亿元人民币。由敦鸿资产及头部国资平台领投，浙大科创集团、盐都国控、丽水市国资公司等产业资本，创世伙伴创投CCV等老股东跟投。融资资金将投向三个方向：具身大脑AtomBrain及因果世界模型研发、全栈AI Infra DataGrid持续升级、以及多形态机器人本体在真实产业场景中的规模化交付与验证。这是近两周国内具身智能领域的又一笔大额融资，显示资本持续看好具身智能从实验室走向产业落地的前景。</p>
+        <a href="https://www.jiemian.com/article/14922357.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 界面新闻 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>"偷取思考"论文：研究者成功从专有LLM API中恢复加密的思维链推理</h2>
+        <p>来自ELLIS Institute Tübingen、Max Planck Institute、MATS和Snyk的研究团队发表论文，展示了一种从Claude Opus 4等专有前沿模型中恢复加密思维链（chain-of-thought）推理痕迹的方法。该方法无需直接攻击强模型或触发反蒸馏安全机制：研究者将强模型生成的推理轨迹回放到较弱的兄弟模型中，对弱模型进行越狱攻击，从而还原强模型的隐藏推理过程。论文包含交互式演示，对Anthropic、OpenAI、Google的专有推理功能安全框架构成重大挑战。</p>
+        <a href="https://stolen-thoughts.com" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Stolen Thoughts 项目页 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>第二届人形机器人运动会8月22日北京开赛：16国2056台机器人，场景赛首次引入多机协同</h2>
+        <p>第二届世界人形机器人运动会将于8月22日至26日在北京国家速滑馆"冰丝带"举行，来自16个国家的666支队伍、2056台机器人参赛，队伍数量较首届增长138%。赛事设51个项目、1301场比赛，场景赛从6项增至21项，覆盖家庭、酒店、工业、应急救援等9大真实场景，首次引入双机器人、四机器人协同作业。竞技项目要求机器人自主完成，场景赛自主完成成绩权重为遥控方式的2倍。国内157家企业、27所985高校参与，折射人形机器人正从技术展示加速迈向真实场景应用。</p>
+        <a href="https://www.doit.com.cn/newsflash/837478888108101.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: DoIT -></a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业的核心信号是"速度与成本的双重战争"进入白热化阶段。Google发布Gemini 3.7 Flash，仅用3周迭代一次，代码能力追平旗舰、价格直接腰斩，新任DeepMind负责人Koray Kavukcuoglu显然在加速追赶节奏；OpenAI则联合Cerebras推出Ultrafast模式，把GPT-5.6 Sol跑到750 tokens/秒，用晶圆级芯片绕过GPU内存瓶颈，在"智能不减的前提下提速14倍"——两大巨头在"速度"这个维度上的军备竞赛，正在把AI从"可用工具"推向"实时基础设施"。</p>
+        <p>DeepSeek同日发布Harness开源Agent框架（MIT协议）并宣布峰谷定价，"一切皆插件"的设计哲学把Agent开发门槛降至pip install一行代码，GitHub星数半日破3万；叠加腾讯混元2.0（406B参数、IMO数学超GPT-4o、2027年开源），国产AI在"基础设施层"和"模型层"同时加速补位。另一边，Anthropic被曝以60亿美元收购以色列Decart AI强化低延迟推理，原力无限近10亿元融资押注具身智能商业化，资本持续在"实时推理"和"物理世界落地"两个方向重仓下注。</p>
+        <p>值得关注的是，研究侧也传来安全警钟："偷取思考"论文展示了从Claude Opus 4等专有模型中恢复加密思维链的方法，对闭源模型的"安全黑箱"假设构成根本性挑战；而人形机器人运动会的扩容，则标志着具身智能从Demo展示进入多机协同的实战检验。产品、资本、研究、产业四条线同时活跃，说明AI产业正处于从"能力验证"向"规模化落地"的关键窗口期，实时化、开源化、物理世界化是当前最值得关注的三大趋势。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
