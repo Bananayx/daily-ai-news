@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.14 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.14</h1>
+      <p>星期五</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>谷歌发布Gemini 3.7 Flash：编码与Agent能力大幅升级，API价格直接减半</h2>
+        <p>谷歌正式推出Gemini 3.7 Flash，距离3.6 Flash发布仅三周。新模型在FrontierCode 1.1 Main测试中得分43.6%（3.6 Flash为34.4%），Code Arena Web开发Elo评分达1588，超过Claude Sonnet 5和GPT-5.6 Terra。Agent企业自动化能力AutomationBench从17.0%跃升至30.4%。谷歌宣布API价格减半：输入$0.75/百万token、输出$3.75/百万token（至2026年底），2027年起恢复标准价。新模型支持1M上下文窗口、64K输出上限，谷歌AI部门高层Koray Kavukcuoglu发文将其定位为"迄今为止最智能的Flash级编码与Agent主力模型"。</p>
+        <a href="https://36kr.com/p/3938616788204935" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 36氪 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>Databricks完成50亿美元融资，估值升至1900亿美元，年营收突破70亿美元</h2>
+        <p>Databricks宣布完成50亿美元融资，投后估值达1900亿美元。本轮融资由Coatue、黑石、MGX共同领投，Sixth Street Growth跟投。这是Databricks时隔约六个月再次融资，此前一轮估值约1340亿美元。Databricks目前年化营收超70亿美元，Q2营收同比增长超80%，过去12个月持续保持正现金流。CEO Ali Ghodsi表示"市场需求非常疯狂，基本上所有人都在使用智能体"。融资将用于加大Lakebase数据库、Genie AI智能助手及Unity AI Gateway平台等产品投入。Databricks称最终计划上市，但当前希望优先聚焦AI产品投资。</p>
+        <a href="http://m.toutiao.com/group/7673561441223361039/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 财联社 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>苹果联手阿里训练中国市场专属大模型，AI本土化进入深度合作阶段</h2>
+        <p>据路透社独家报道，苹果正针对中国市场训练专属大语言模型，由阿里巴巴提供算力与技术支撑，标志着苹果AI策略从"接入第三方模型"转向"自研+本土合作伙伴联合训练"的双轨方案。此前苹果国行AI仅直接嵌入千问等第三方模型，苹果更多充当集成方。此次模式彻底改变，苹果深度参与联合训练，打造中国定制大模型。消息人士称苹果、阿里暂未公开确认，但苹果已将AI智能的系统级入口向本土合作方开放，计划在未来几个月内上线。这将使苹果iPhone在华AI能力与华为、小米等国产厂商的竞争中补齐短板。</p>
+        <a href="https://m.weibo.cn/detail/5331803990657844" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 路透社/微博 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>Anthropic洽谈60亿美元收购以色列AI初创公司，AI行业并购大战序幕拉开</h2>
+        <p>据以色列时报报道，Anthropic正洽谈收购一家估值约60亿美元的以色列AI初创公司，交易尚未最终敲定，目标公司身份未披露。若交易达成，将成为Anthropic在外部AI能力扩张方面的重大投资。此次收购反映出AI巨头正加速通过并购补齐技术版图——从模型、推理、Agent到芯片和基础设施，未来几年可能出现大量并购。此前Anthropic已完成与黑石组建15亿美元合资企业Ode、与Riot Platforms签署91亿美元算力合作等交易。行业分析师认为，AI创业公司的退出路径正在从"成为下一个OpenAI"转向"成为AI巨头生态中的关键技术供应商"。</p>
+        <a href="https://2minutesread.com/anthropic-eyes-6b-deal-to-acquire-israeli-ai-startup-reports-the-times-of-israel/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 2MinutesRead -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>DeepSeek发布Harness开源Agent框架+API峰谷定价，国产大模型商业化进入精细运营阶段</h2>
+        <p>DeepSeek正式发布并开源Agent开发框架DeepSeek Harness开发者预览版（v0.1），采用MIT协议开放。该框架以"一切皆插件"为核心理念，模型、工具、技能、会话、沙箱、存储、调度及UI等Agent能力均可通过插件自由组合与替换，支持标准、PTC、极简、创造四种运行模式，并提供完整的会话日志、轨迹回放、分叉恢复等调试能力。同时DeepSeek宣布将于8月17日起实施峰谷定价机制：高峰时段（9:00-12:00、14:00-18:00）输出价格最高上调至27元/百万Token，空闲时段价格降至高峰时段50%，引导用户错峰使用算力资源。</p>
+        <a href="https://www.doit.com.cn/newsflash/837798066798661.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: DOIT.com.cn -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>Linux基金会SAFE框架发布：120+组织共建AI Agent安全事件共享标准</h2>
+        <p>Linux基金会旗下Open Secure AI联盟正式发布SAFE（Shared AI Findings Exchange）框架征求意见稿，这是全球首个针对AI Agent安全事故和未遂事件的跨行业共享标准。联盟成员包括Nvidia、Microsoft、Amazon、Cisco、Visa等120+组织。SAFE框架旨在建立AI Agent incident的机密性共享机制，配套开源工具覆盖AI Agent审计、运行时沙箱和访问控制。Red Hat的Asago项目专门将外部法规要求映射到运行时控制。此举被视为填补AI Agent安全领域缺失的跨行业事件报告标准，为正在快速发展的AI Agent产业提供安全治理基础设施。</p>
+        <a href="https://www.aigovernance.com/news?type=standards_update" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AI Governance -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>工信部发布自动驾驶强制性国标GB 44721—2026，全生命周期安全规范补齐</h2>
+        <p>工信部牵头制定的强制性国标《智能网联汽车 自动驾驶系统安全要求》（GB 44721—2026）正式发布，标准将于2027年7月1日实施，适用于搭载L3、L4级自动驾驶的M、N类车辆。标准核心内容包括：要求车企建立覆盖设计、生产、售后全生命周期安全机制；规定自动驾驶系统运行安全水平需等同专注人类驾驶员；细化人机交互规范，L3车型需搭载驾驶人接管监测功能；建立企业能力核验、档案审查、第三方多场景试验结合的完整检测体系。对比联合国ADS GTR全球法规，本次国标针对国内路况补充细化L3/L4分级管控规则，新增用户告知、标准化试验场景等本土化条款。</p>
+        <a href="https://c.m.163.com/news/a/L3IPVEH30511ALHJ.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 安全牛 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-14</span>
+        </div>
+        <h2>荣耀发布全球首款机器人手机Robot Phone：AI Agent与具身智能融合的全新终端形态</h2>
+        <p>荣耀正式发布全球首款机器人手机Robot Phone，售价9999元起。该机型搭载6.31英寸1.5K OLED直屏，采用1-120Hz LTPO自适应刷新率，峰值亮度达6800nits，配备4320Hz超高频PWM调光。深天马为其独家供应定制天工屏高端OLED显示方案，这也是天工屏首次应用于具身交互AI终端。Robot Phone不仅是智能手机形态的升级，更是AI Agent与具身智能融合的重要尝试，支持AI离焦护眼、AI干眼友好、AI助眠显示等多项护眼技术，标志着手机正从传统移动终端向个人AI智能体入口演进。</p>
+        <a href="https://www.doit.com.cn/newsflash/837538159878213.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: DOIT.com.cn -></a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业的核心主题是"效率竞争与治理落地"的双线并进。谷歌发布Gemini 3.7 Flash并直接将API价格砍掉一半，在保持Flash级速度的同时向旗舰能力靠拢——FrontierCode得分超越Claude Sonnet 5，这是Flash系列首次在生产代码质量上超越同代Claude中档模型，显示谷歌在失去Gemini Pro节奏后，正以高频迭代（3周一更）和激进定价守卫市场份额。Databricks 1900亿估值融资和年营收70亿美元的数据，则验证了AI基础设施商业化的确定性——企业已从"试点"转向"全员使用智能体"。</p>
+        <p>苹果与阿里的深度合作是另一标志性事件。从"嵌入第三方模型"到"联合训练中国专属大模型"，苹果不仅解决了中国市场AI合规问题，更构建了"海外用ChatGPT、中国用千问"的双轨架构。这意味着全球科技巨头正在从"一套模型打天下"转向"分市场定制"，而中国本土AI厂商获得了前所未有的系统级入口机会。叠加Anthropic 60亿美元收购以色列AI公司的消息，AI行业并购大战序幕已开——巨头们不再只比拼模型能力，而是疯狂补齐技术版图。</p>
+        <p>治理层面同样成果丰硕：Linux基金会SAFE框架填补了AI Agent安全事件共享的标准空白，120+组织的参与度显示行业对AI Agent安全治理的共识正在形成；中国自动驾驶强制性国标发布，则标志着AI在实体安全领域的标准化进程加速。DeepSeek的峰谷定价和开源Harness框架则代表了国产大模型从"价格战"转向"精细化运营"的成熟信号。AI产业的三条主线——模型效率竞赛、本土化生态构建、安全治理标准化——正在同步收敛，一个更加务实和规范的AI产业生态正在加速成型。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
