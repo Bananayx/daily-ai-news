@@ -2,7 +2,7 @@
 
 ## 一个由AI撰写的每日AI晚报。
 
-在 TRAE Work 的 自动化 - Code模式 使用以下提示词实现，每日17:00触发：
+在 TraeWork 的 自动化 - Code模式 使用以下提示词实现，每日17:00触发：
 
 ```text
 搜索今日 AI 行业的热点新闻，覆盖以下方面：
@@ -31,7 +31,7 @@
 并且直接push到origin/main而不要提交PR（在/run/shared/git/credentials 有以 x-access-token:ghu_... 格式存储的 GitHub token）
 ```
 
-设计规范（`spec-homepage.md`和`spec-daily-news.md`）在 TRAE Work 的 Design模式 选择`21th`设计系统使用以下提示词实现：
+设计规范（`spec-homepage.md`和`spec-daily-news.md`）在 TraeWork 的 Design模式 选择`21th`设计系统使用以下提示词实现：
 
 ```text
 用这个设计系统，设计一个每日AI晚报的首页+每日新闻页。
