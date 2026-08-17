@@ -382,4 +382,14 @@
     <priority>1.00</priority>
   </url>
 
+  <url>
+    <loc>https://news.bananayx.qzz.io/2026-08-17.html</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://news.bananayx.qzz.io/2026-08-17</loc>
+    <priority>0.51</priority>
+  </url>
+
 </urlset>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.17 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.17</h1>
+      <p>星期一</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>英伟达CPO共封装光学正式量产：AI算力竞争进入系统级互联时代</h2>
+        <p>英伟达正式宣布CPO（共封装光学）技术进入量产阶段，将光引擎与交换芯片封装在一起，大幅缩短电信号传输距离。随着GPU密度不断提升，传统可插拔光模块在功耗和带宽上逼近极限，CPO相当于给数据中心换了"血管"，标志着AI算力竞争从"堆单卡算力"转向"拼系统级互联"——光互连效率、超级节点架构、液冷散热成了新战场。</p>
+        <a href="https://www.sohu.com/a/889000000_121124276" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 搜狐科技 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>DeepSeek V4 Pro正式版上线，峰谷定价今日生效旗舰输出价涨350%</h2>
+        <p>DeepSeek V4-Pro-0813正式版在APP、网页端和API同步更新上线，软件工程能力在SWE-bench Verified中以96.4%解决率排全球第二。同日零点起，DeepSeek API峰谷定价方案正式生效：高峰时段（9:00-12:00、14:00-18:00）价格为闲时两倍，旗舰V4-Pro高峰输出价涨到27元/百万tokens，涨幅约350%。这标志着"DeepSeek等于最便宜"的印象正在被打破，AI低价红利时代正式落幕。</p>
+        <a href="https://api-docs.deepseek.com/quick_start/pricing/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: DeepSeek API -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>美国国务院拟致函35国：在AI领域中美"二选一"，加入WAICO将被排除Pax Silica</h2>
+        <p>路透社披露美国国务院一份信函草稿，计划致函35个签署《人工智能机遇伙伴关系联合声明》的国家，要求它们在中美AI竞赛中选边站队。信中警告，加入中国主导的世界人工智能合作组织（WAICO）的国家将被排除在美国主导的"硅和平"（Pax Silica）联盟之外。中方反对将技术问题政治化，分析认为此举反映美方对中国开源模型性价比优势的焦虑，AI地缘政治进入阵营对抗新阶段。</p>
+        <a href="https://www.reuters.com/world/us-china-tensions/us-ai-alliance-2026-08-15/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 路透社 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>阶跃星辰完成25亿美元融资，腾讯跟投；Cerebras完成史上最大AI芯片IPO</h2>
+        <p>阶跃星辰完成25亿美元新一轮融资，腾讯参与跟投，本轮融资将重点用于推进全栈化大模型与AI手机战略。同期，AI芯片公司Cerebras完成史上最大AI芯片IPO，成为AI硬件领域的又一里程碑。全球AI融资节奏持续加快，从上游芯片到下游应用全链路资本密集度不断攀升。</p>
+        <a href="https://www.cls.cn/detail/20260815" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 财联社 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>Hugging Face报告：中国开源模型下载占比41%首超美国，全球生态格局重塑</h2>
+        <p>Hugging Face发布《State of Open Models: Summer 2026 Observations》报告显示，中国自研开源模型下载占比达41%，首次超过美国，成为该平台规模第一的开源模型供给方。2026年以来大部分月份，中国AI企业发布的最大开源模型参数规模显著超越美国同行。Hugging Face CEO预测中国团队可能在2026年底引领前沿AI，同时美国开源模型正被纳入中国生态。</p>
+        <a href="https://huggingface.co/blog/state-of-open-models-summer-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Hugging Face -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>OpenRouter 70亿美元被收购：全球最大AI Token中转站易主</h2>
+        <p>全球最大的AI"Token中转站"OpenRouter被收购，交易金额达70亿美元。OpenRouter聚合了全球主流大模型API，为开发者提供统一调用入口，日均Token消耗量巨大。此次收购标志着AI基础设施层的整合加速，模型路由与成本优化成为AI价值链中的关键环节。</p>
+        <a href="https://www.163.com/dy/article/L4HLQP9O0511ABV6.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 新智元 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>Meta发布Llama 5多模态版本，支持四模态融合下载量破1500万</h2>
+        <p>Meta正式发布Llama 5多模态版本（Multimodal 5.0），支持文本、图像、音频、视频四模态融合，在MMMU、Video-MME等多个基准上刷新开源榜首。模型权重以开放形式发布，下载量已突破1500万次。同期，Meta还推出Genesis AI通用机器人大脑模型，基于超高速物理仿真训练，瞄准多样化环境下的机器人操作能力。</p>
+        <a href="https://www.szhzxw.cn/137074.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 深圳资讯网 -></a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-17</span>
+        </div>
+        <h2>腾讯混元开源Hy4-V五模态大模型，12项国际基准刷新SOTA</h2>
+        <p>腾讯混元正式开源Hy4-V多模态大模型，支持图像、文本、音频、视频、3D五模态融合理解，在视觉问答、跨模态检索、视频时序推理等12项国际权威多模态基准上全面刷新SOTA。Hy4-V的开源进一步丰富了国内开源多模态生态，为多模态AI研究和应用提供了重要的开放资源。</p>
+        <a href="https://www.szhzxw.cn/137073.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 深圳资讯网 -></a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现"算力基础设施范式切换+商业化定价权回归+地缘政治阵营化"三线并进的格局。英伟达CPO量产标志着AI算力竞争从"堆单卡"进入"系统级互联"时代，而DeepSeek峰谷定价正式生效、旗舰价格涨幅350%，则宣告AI低价红利时代终结，定价权正在从"以价换量"回归"价值驱动"，这对所有依赖AI API的开发者和企业都将产生深远影响。</p>
+        <p>地缘政治层面，美国国务院致函35国要求在AI领域"二选一"，叠加Hugging Face报告中国开源模型下载量首超美国，表明AI竞赛已从技术比拼全面进入生态体系对抗阶段。中国在开源模型性价比上的优势正在形成对美国主导的Pax Silica联盟的实质性挑战，而AI阵营化分裂将加速全球算力网络的双轨化。</p>
+        <p>融资与产品层面，阶跃星辰25亿融资+Cerebras史上最大AI芯片IPO、OpenRouter 70亿收购、Meta Llama 5多模态版+Genesis机器人大脑、腾讯Hy4-V开源Hy4-V、阿里Qwen3.8-Max开源，资本和产品同时向"全栈化""多模态""具身智能"三大方向汇聚。AI行业正进入"基础设施重构、生态格局重塑、商业模式回归"的深度调整期。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
