@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.18 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.18</h1>
+      <p>星期二</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>Anthropic年化营收飙至650亿美元，冲刺2万亿美元史上最大IPO</h2>
+        <p>TechCrunch报道，Anthropic年化营收在7月底已突破650亿美元（5月为470亿，去年底仅90亿），六个月翻了六倍以上。投资者模型预测2026全年营收将达1000-1200亿美元，公司正筹备秋季IPO，目标估值2万亿美元以上，若成功将成为史上规模最大的上市交易。相比之下OpenAI近期年化营收约400亿美元，Claude与GPT的商业化差距正以超出市场预期的速度逆转扩大。</p>
+        <a href="https://techcrunch.com/2026/08/17/anthropics-annualized-revenue-surges-to-65b/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: TechCrunch -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>Stripe以70亿美元收购OpenRouter，AI网关基础设施层战略整合</h2>
+        <p>支付巨头Stripe同意以超过70亿美元收购AI网关平台OpenRouter，后者5月估值仅13亿美元，三个月内估值暴涨逾五倍。OpenRouter聚合数百个AI模型提供统一路由入口，位于开发者与模型提供商之间的关键位置。此次收购标志着AI基础设施与工具层正进入整合加速期，Stripe将支付能力与模型路由基础设施结合，瞄准新兴的AI用量与Agent交易经济，验证了"模型无关型"基础设施的战略价值。</p>
+        <a href="https://beta.buildfastwithai.com/blogs/ai-news-today-august-18-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: Build Fast With AI -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>英伟达15亿美元押注SB Energy+最高1050亿担保，OpenAI俄亥俄8吉瓦AI工厂落地</h2>
+        <p>英伟达宣布与软银旗下SB Energy达成多年期合作，推进美国俄亥俄州PORTS-Pike科技园区巨型AI数据中心建设。OpenAI作为租户将使用约4.25吉瓦IT负载部署英伟达全栈DSX AI工厂平台，英伟达已提供最高1050亿美元的剩余价值担保，并可自行决定为额外约3.75吉瓦容量提供信用支持。到2030年该站点若扩展至约16吉瓦，英伟达相关计算机会约达6000亿美元。项目配套330亿美元、9.2吉瓦天然气发电厂位于原铀浓缩场址，AI数据中心需求正重塑区域能源格局。</p>
+        <a href="https://www.jiemian.com/article/14935743.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 界面新闻 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>Anthropic起诉美国政府挑战五角大楼标签，Jeff Dean领衔OpenAI+DeepMind工程师联署支持</h2>
+        <p>Anthropic正式向法院提起诉讼，挑战美国国防部将其列为"供应链风险"的决定，该标签导致联邦机构和承包商无法使用Claude，这是AI公司史上首次通过法律手段直接对抗美国政府。更具历史意义的是，以谷歌Jeff Dean牵头，OpenAI和Google DeepMind工程师共同向DC上诉法院提交法庭之友简状，支持Anthropic的诉讼请求——AI竞争对手史上首次正式联合对抗政府分类。同日披露的Anthropic第二份风险报告还承认，生化武器危险知识分类器在其最大外部反馈通道上整整静默失效了11个月。</p>
+        <a href="https://apis.you/news/openai-google-engineers-amicus-brief-pentagon-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: APIs.you -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>阿里云Qwen3.8 27B击败Opus 4.6登顶同量级，消费级设备可跑的代码模型新王</h2>
+        <p>Alibaba新发布的Qwen3.8 27B模型在Artificial Analysis同尺寸类别中排名第一，综合得分52分，击败了半年前还是SOTA的Claude Opus 4.6，能力追平DeepSeek V4 Flash（参数规模超过1500亿的模型）。开源社区惊呼"笔记本可跑的模型现在正碾压半年前的行业顶配"。实测确认代码能力极强，但默认xhigh推理设置存在实用隐患——SVG测试耗时21分钟烧掉2.2万推理tokens，关闭推理后两分钟即可获得同等质量输出，社区正通过fork llama.cpp等方式进行工作流适配。</p>
+        <a href="https://ai0.news/posts/2026-08-18-daily-digest/" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AI0.news -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>OpenAI GPT-5.6 Sol价格腰斩至$2.5/$15，被评为OpenAI史上最强视觉模型</h2>
+        <p>OpenAI在OpenRouter平台上将GPT-5.6 Sol价格大幅下调50%，输入降至$2.50/百万tokens、输出降至$15/百万tokens，直接对标价格更优的Grok 4.6等竞品。Hacker News社区对降价评价两极，一方面赞赏价格回归合理，另一方面坚持认为自5.3-Codex以来每次OpenAI新版本在能力和稳定性上都存在倒退。Roboflow独立评测称GPT-5.6 Sol是"OpenAI发布过的最强视觉模型"，但文章也承认在多数检测基准上谷歌Gemini 3.5 Flash仍更便宜、更快、精度更高。</p>
+        <a href="https://openrouter.ai/openai/gpt-5.6-sol" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: OpenRouter -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>月之暗面Kimi估值飙至180亿美元三个月翻四倍，个人订阅月增8280%</h2>
+        <p>月之暗面旗下AI助手Kimi最新估值已飙升至180亿美元，三个月前仅为45亿美元，公司正进行新一轮10亿美元融资。商业化指标同样惊人：受Kimi K2.5和Kimi Claw产品驱动，公司20天内收入已超过2025年全年。Stripe公开数据显示，Kimi个人付费订阅量单月环比增长8280%，验证了国产AI大模型在C端商业化上的爆发力，也印证了当前AI融资马太效应正加速向头部平台型公司集中。</p>
+        <a href="https://apis.you/news/kimi-valuation-18b-4x-surge-2026" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: APIs.you -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-18</span>
+        </div>
+        <h2>谷歌A2A Agent协议正式纳入Agentic AI基金会，与MCP并列构建开放标准</h2>
+        <p>Google的Agent2Agent协议（A2A）正式成为Agentic AI基金会的托管项目，与Model Context Protocol（MCP）等开源Agent基础设施努力并列推进。A2A是一套让AI Agent之间交换结构化能力卡片和访问端点的开放标准，此举标志着Agent基础设施层正从"各家私有协议"走向社区治理的开放标准阶段。Agentic AI基金会将多个原分属不同厂商的协议统一管理，降低多Agent协作生态的碎片化程度，为Agent跨厂商互联互通提供统一基座。</p>
+        <a href="https://aiagentstore.ai/ai-agent-news/this-week" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: AI Agent Store -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现"商业体量跃迁+基础设施资本化+治理对抗升级"三线并发格局。Anthropic年化营收650亿、估值冲2万亿史上最大IPO，意味着前沿模型商业化已从"烧钱换增长"切换到"体量正反馈"阶段——六个月营收翻六倍的增长速度在整个软件行业史无前例，也重塑了市场对AI赛道天花板的想象。Stripe超70亿收购OpenRouter、英伟达千亿级担保绑定OpenAI数据中心，则标志着AI价值链的争夺正从"模型能力"迁移到"基础设施层"——路由网关、算力融资、能源选址和长周期租约担保这些此前不为公众关注的环节，正在成为千亿级资本博弈的主战场。</p>
+        <p>治理与政策端同样进入新阶段：Anthropic起诉美国政府挑战供应链风险标签、谷歌Jeff Dean领衔竞争对手工程师联署支持，这种"竞争对手对抗政府联合阵线"在科技史上罕见，折射出前沿AI公司与国家安全机构之间的张力正突破行业内部协商框架走向司法公开对抗。谷歌A2A协议正式纳入基金会、与MCP并列成为开放标准，Agent基础设施层从私有协议走向社区共治则是另一条长线信号：当模型能力趋同后，标准与生态的卡位战才是决定格局的深层战场。</p>
+        <p>开源侧Qwen3.8 27B击败半年前的Opus 4.6再次验证了"能力折旧速度"这一被低估的变量——消费级笔记本可跑的模型正在快速吞噬六个月前旗舰闭源模型的价值空间，这对所有依赖"能力稀缺性"维持高溢价的厂商都是结构性压力。月之暗面Kimi估值3月翻四倍、Stripe数据记录订阅月增8000%以上，国产大模型的C端商业化验证正以超出所有人预期的速度落地。整体而言，AI行业正进入"商业体量急剧膨胀+资本深度绑定基础设施+治理框架走向公开对抗+开源挤压闭源价值"的多重拐点叠加期。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
