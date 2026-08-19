@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026.08.19 - 每日AI晚报</title>
+  <style>
+    :root {
+      --background: #c5c9c9;
+      --foreground: #111111;
+      --card: #d8dada;
+      --card-foreground: #111111;
+      --primary: #111111;
+      --primary-foreground: #ffffff;
+      --muted-foreground: #888888;
+      --accent: #0040ff;
+      --accent-foreground: #ffffff;
+      --destructive: #d73333;
+      --destructive-foreground: #ffffff;
+      --border: #ffffff;
+      --chart-2: #386aff;
+      --chart-3: #6b90ff;
+      --ring: #000000;
+      --font-sans: Geist, ui-sans-serif, sans-serif, system-ui;
+      --font-mono: Geist Mono, ui-monospace, monospace;
+      --radius: 0px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      height: 56px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 2px 2px 0px var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        height: 64px;
+      }
+    }
+
+    .nav-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        padding: 0;
+      }
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--primary-foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    .nav-back-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary-foreground);
+      padding: 6px 14px;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-back-btn {
+        display: inline-flex;
+      }
+    }
+
+    main {
+      padding-top: 56px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding-top: 64px;
+      }
+    }
+
+    .date-section {
+      padding: 48px 16px 32px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .date-section {
+        padding: 64px 0 40px;
+      }
+    }
+
+    .date-section h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .date-section p {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--muted-foreground);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .date-divider {
+      width: 64px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .news-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .news-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .news-card {
+      background: var(--card);
+      box-shadow: 2px 2px 0px var(--foreground);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 120ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .news-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--foreground);
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border: 2px solid transparent;
+      line-height: 1.5;
+      letter-spacing: 0;
+      background: transparent;
+    }
+
+    .tag-industry {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tag-research {
+      border-color: var(--chart-3);
+      color: var(--chart-3);
+    }
+
+    .tag-policy {
+      border-color: var(--destructive);
+      color: var(--destructive);
+    }
+
+    .tag-product {
+      border-color: #e08a00;
+      color: #e08a00;
+    }
+
+    .tag-funding {
+      border-color: var(--chart-2);
+      color: var(--chart-2);
+    }
+
+    .time-stamp {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted-foreground);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .news-card h2 {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--foreground);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin-bottom: 12px;
+    }
+
+    .news-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--foreground);
+      max-width: 72ch;
+      margin-bottom: 12px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .source-link:hover {
+      color: var(--accent);
+    }
+
+    .trends-section {
+      padding: 0 16px 64px;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .trends-section {
+        padding: 0 0 96px;
+      }
+    }
+
+    .trends-section h2 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .trends-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trends-container p {
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .footer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 0;
+      }
+    }
+
+    .footer-container span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      box-shadow: 2px 2px 0px var(--foreground);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .news-card {
+        transition: none;
+      }
+      .source-link {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">每日AI晚报</a>
+      <a href="index.html" class="nav-back-btn">&larr; 回到首页</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="date-section">
+      <h1>2026.08.19</h1>
+      <p>星期三</p>
+      <div class="date-divider"></div>
+    </section>
+
+    <section class="news-section">
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>宇树科技科创板上市首日暴涨629%，市值破4400亿，创始人王兴兴成新一代90后首富</h2>
+        <p>宇树科技今日正式登陆上交所科创板，成为A股"人形机器人第一股"。发行价150.80元/股，上市首日开盘即报1100元，较发行价大涨629.44%，总市值达4449亿元，刷新全面注册制以来新股首日表现纪录。公司核心零部件自研率超90%，2025年人形机器人出货量超5500台、全球市占率32.4%，是全球少数实现规模化盈利的人形机器人企业。创始人王兴兴直接及间接持有约30%股份，持股市值突破千亿元登顶90后首富，顺为资本关联方账面浮盈超150亿元，人形机器人产业的商业价值与投资热度正迎来新一轮爆发。</p>
+        <a href="https://www.doit.com.cn/newsflash/839570393301061.html" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: DOIT -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>Anthropic Q2营收116亿美元首次反超OpenAI（67亿），AI双寡头格局出现历史性反转</h2>
+        <p>数智岛援引财报数据，OpenAI 2026年第二季度营收67亿美元（环比仅增18%），但营业亏损扩大至123亿美元；同期Anthropic营收翻倍至116亿美元，首次超过OpenAI并实现小幅营业利润——AI行业延续两年的"OpenAI第一、Anthropic追赶"双寡头格局出现历史性反转。Anthropic年化营收据报已突破650亿美元，IPO筹备加速推进，华尔街银行正争夺100亿美元信用额度承销权以换取史上最大IPO的簿记资格，创始人团队还计划在IPO前设置额外投票权以保持控制权。</p>
+        <a href="https://www.shuzhipunk.com/articles/6Dsz3clVQSr" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 数智岛 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-funding">💰 融资动态</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>AI芯片初创Etched一个月估值翻倍至210亿美元，量化巨头Jane Street领投7亿美元</h2>
+        <p>AI推理芯片初创公司Etched今日宣布完成7亿美元新一轮融资，估值瞬间翻倍至210亿美元（一个月前仅约105亿）。领投方为华尔街量化交易巨头Jane Street，后者在测试其全栈推理集群后表示高度认可，并已在自家数据中心部署了Etched出货的首套AI集群系统。Etched推出的预填芯片与集群级记忆互连技术被视为提升推理效率的关键突破，本轮融资将用于扩大产能和加速下一代产品研发，反映出资本对AI专用推理硬件赛道的押注力度正持续加码。</p>
+        <a href="https://www.shuzhipunk.com/articles/wzuICeVf9OI" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 数智岛 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>Cerebras发布WSE-3 Turbo芯片与CS-4系统，词元容量提升10倍、训练速度翻倍</h2>
+        <p>Cerebras Systems今日发布新一代晶圆级引擎WSE-3 Turbo芯片及配套的CS-4超级计算机系统。相较上代产品，CS-4实现了10倍词元容量与2倍训练速度提升，并基于全新Nexus机架平台完成系统级重构。Cerebras晶圆级架构路线与英伟达GPU集群路线形成差异化竞争，针对超大规模大模型训练场景提供单芯片替代数千张GPU的算力方案，本次升级进一步拉大了其在超大上下文长度训练场景下的性能优势。</p>
+        <a href="https://www.shuzhipunk.com/articles/Hc8Ew3qExWt" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 数智岛 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-research">🔬 学术研究</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>文心大模型4.5-Tiny今日正式开源，35亿参数Apache 2.0协议移动端可本地推理</h2>
+        <p>公开代码仓库显示，百度文心大模型4.5-Tiny（参数规模约35亿）于8月19日正式开源，支持Apache 2.0商用友好协议。该版本经轻量化专项优化，可在主流移动端SoC（如骁龙8 Gen4、麒麟9100）上实现本地推理，实测功耗低于2W，免去云端往返延迟并可支持隐私敏感场景离线运行。同步发布的还有端侧微调与部署工具链，为移动端AI应用开发者提供从训练到推理的完整开源方案。</p>
+        <a href="https://blog.csdn.net/heawivip/article/details/163875940" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: CSDN博客 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-product">🚀 产品发布</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>Anthropic发布Claude Opus 5：推理能力全面超越Fable 5，价格降低，安全使用限制大幅放宽</h2>
+        <p>Anthropic今日正式发布旗舰大模型Claude Opus 5，在多项推理基准测试中全面超越上一代Fable 5，CoBench v2得分达62.8%。与前代相比，Opus 5同步降低了API调用成本，并大幅减少了安全相关的使用限制条款——此前被广泛投诉的代码安全、长文档分析、研究场景中的过度拒绝率显著改善。公司同时宣布，将近期针对Claude Code推出的50%更高使用限制转为永久策略，并新增了UI设计辅助功能。</p>
+        <a href="https://franklineh.com/news/0JIobQsdxuXHx00tFcQF" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: FranklinEH -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-policy">⚖️ 政策法规</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>广州智能网联汽车AI决策细则+成都大模型备案合规指引双规齐发，地方AI治理加速落地</h2>
+        <p>今日地方AI治理政策双线推进：广州市印发《智能网联汽车AI决策系统测试细则》，明确要求L3级以上智能驾驶车型必须在封闭场地完成"极端天气AI冗余决策"验证，并向交管部门提交模型失效切换日志，宣发口径侧重于公共安全责任划分；成都高新区同步推出《大模型备案与企业合规指引》，设立线下专窗将大模型上线前的安全评估咨询周期由法定15日压缩至5个工作日，并明确语料来源合法性自检清单以降低企业合规不确定性。</p>
+        <a href="https://blog.csdn.net/heawivip/article/details/163875940" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: CSDN博客 -&gt;</a>
+      </article>
+
+      <article class="news-card">
+        <div class="tag-row">
+          <span class="tag tag-industry">🏢 行业动态</span>
+          <span class="time-stamp">2026-08-19</span>
+        </div>
+        <h2>Arm成立36年首次战略大转型，从IP授权模式自研成品AGI CPU，首批客户含Meta与OpenAI</h2>
+        <p>安谋控股（Arm）正推进其成立36年来最重大的战略转型：从芯片设计IP授权商，转向自主制造并直接销售成品处理器。2026年3月推出的AGI CPU是其历史上首款自研芯片产品，首批客户名单已包含Meta、OpenAI等头部AI企业，旨在争抢AI服务器CPU市场份额。分析指出，转型面临内存接口、晶圆产能等多重供应链挑战，预计需要2年时间逐步扩大自身制造份额，Arm长期商业模式正迎来根本性重构。</p>
+        <a href="https://www.shuzhipunk.com/articles/owDtCOZp0cQ" target="_blank" rel="noopener noreferrer" class="source-link">信息来源: 数智岛 -&gt;</a>
+      </article>
+    </section>
+
+    <section class="trends-section">
+      <h2>今日趋势点评</h2>
+      <div class="trends-container">
+        <p>今日AI行业呈现"具身智能资本化爆发+双寡头格局反转+端侧开源下沉"三线历史性交汇格局。宇树科技科创板首日暴涨629%、市值破4400亿、创始人登顶90后首富，不仅是一个新股神话，更标志着具身智能赛道从技术验证与Demo阶段正式跨入"规模化盈利+资本市场定价"的商用兑现期——人形机器人这一被讨论多年的方向，终于以610亿发行市值、90%自研率、32%全球市占率的硬数据向市场证明其真实商业价值。Anthropic Q2营收116亿首次反超OpenAI（67亿）且实现盈利，配合650亿年化营收冲刺2万亿IPO，则意味着前沿AI商业化竞争从"OpenAI一家独大"进入"双寡头交替领跑"的新格局，Claude在企业端与开发者端的渗透速度正超出所有人预期。</p>
+        <p>硬件与开源侧同样出现结构性拐点信号：Etched一个月估值翻倍至210亿、Jane Street领投7亿并部署首套集群，说明量化交易这类低延迟敏感行业正成为AI专用推理芯片的首个"杀手级垂直场景"，AI硬件投资逻辑正从"通用算力稀缺"转向"垂直场景专用优化"。文心4.5-Tiny以35亿参数、Apache 2.0协议、移动端可跑、功耗低于2W的组合开源，叠加Qwen3.8 27B上周超越半年前Opus的现象，共同印证着一个被低估的长期趋势——前沿模型能力的折旧速度正在急剧加快，半年前的顶配闭源模型价值正被消费级硬件可跑的开源版本快速吞噬，这对所有依赖"能力稀缺性"维持高溢价的厂商都是持续的结构性压力。</p>
+        <p>政策端广州+成都双线出台细则，标志着AI地方治理正从"顶层设计"快速走向"垂直场景落地执行"——智能网联汽车的AI决策追责、大模型备案绿色通道都是具体到操作层面的制度安排，合规不再是抽象口号而是实实在在的运营成本。Arm 36年首次转型自研成品CPU、Cerebras发布WSE-3 Turbo晶圆级芯片则折射出另一条深层主线：随着前沿AI模型训练与推理成本成为万亿级支出，算力底层的架构创新与商业创新正以"十年一周期"的密度集中爆发，未来一到两年算力基础设施的格局变化很可能比模型能力本身更具决定性。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <span><a href="https://bananayx.qzz.io" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">&copy; 2026 Banana Y.X.</a></span>
+      <span>内容由AI生成，请谨慎甄别。</span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    const backToTopBtn = document.querySelector('.back-to-top');
+
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  </script>
+</body>
+</html>
